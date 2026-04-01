@@ -4,6 +4,18 @@
 @source "../node_modules/streamdown/dist/*.js";
 @source "../node_modules/@streamdown/code/dist/*.js";
 
+@theme {
+  --color-cf-orange: #f48120;
+  --color-cf-orange-light: #ffb020;
+  --color-cf-orange-dark: #d9650d;
+  --color-cf-blue: #0055ff;
+  --color-cf-dark-gray: #1d1f20;
+  --color-cf-mid-gray: #3c3e40;
+  --color-cf-light-gray: #8e8e8e;
+  --color-bg-deep: #050505;
+  --color-bg-charcoal: #111111;
+}
+
 :root {
   /* Cloudflare Console Color Palette */
   --bg-deep-black: #050505;

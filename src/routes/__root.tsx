@@ -1,25 +1,17 @@
 import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import { Toasty } from "@cloudflare/kumo/components/toast";
 import { useEffect, useState } from "react";
+import { fetchMe } from "../lib/api";
+import type { PublicUser } from "../types";
 
 export interface RouterContext {
-  user: { id: string; name: string; email: string } | undefined;
-}
-
-async function fetchUser(): Promise<RouterContext["user"]> {
-  try {
-    const res = await fetch("/api/me");
-    if (!res.ok) return undefined;
-    return await res.json();
-  } catch {
-    return undefined;
-  }
+  user: PublicUser | undefined;
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   component: RootLayout,
   beforeLoad: async () => {
-    const user = await fetchUser();
+    const user = await fetchMe();
     return { user };
   }
 });

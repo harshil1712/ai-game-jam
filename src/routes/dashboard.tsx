@@ -1,39 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { Surface } from "@cloudflare/kumo";
 import { QRCodeSVG } from "qrcode.react";
-
-interface Game {
-  id: string;
-  title: string;
-  vote_count: number;
-  creator_name: string;
-}
-
-interface DashboardData {
-  games: Game[];
-  total: number;
-}
-
-interface Stats {
-  total_games: number;
-  total_users: number;
-  total_votes: number;
-  recent_games: number;
-}
+import type { LeaderboardGame, DashboardData, Stats } from "../types";
+import { fetchDashboard, fetchStats } from "../lib/api";
+import { usePolling } from "../hooks/usePolling";
 
 export const Route = createFileRoute("/dashboard")({
   component: DashboardPage,
-  loader: async (): Promise<DashboardData> => {
-    const res = await fetch("/api/gallery?limit=10");
-    if (!res.ok) throw new Error("Failed to load gallery");
-    return res.json();
-  }
+  loader: async (): Promise<DashboardData> => fetchDashboard(10)
 });
 
 function DashboardPage() {
   const initialData = Route.useLoaderData();
-  const [games, setGames] = useState<Game[]>(initialData.games);
+  const [games, setGames] = useState<LeaderboardGame[]>(initialData.games);
   const [stats, setStats] = useState<Stats>({
     total_games: 0,
     total_users: 0,
@@ -41,33 +21,16 @@ function DashboardPage() {
     recent_games: 0
   });
 
-  // Poll for updates
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [galleryRes, statsRes] = await Promise.all([
-          fetch("/api/gallery?limit=10"),
-          fetch("/api/stats")
-        ]);
-
-        if (galleryRes.ok) {
-          const data: DashboardData = await galleryRes.json();
-          setGames(data.games);
-        }
-
-        if (statsRes.ok) {
-          const data: Stats = await statsRes.json();
-          setStats(data);
-        }
-      } catch {
-        // Ignore errors
-      }
-    };
-
-    fetchData();
-    const interval = setInterval(fetchData, 5000);
-    return () => clearInterval(interval);
+  const refresh = useCallback(async () => {
+    const [galleryData, statsData] = await Promise.all([
+      fetchDashboard(10),
+      fetchStats()
+    ]);
+    setGames(galleryData.games);
+    setStats(statsData);
   }, []);
+
+  usePolling(refresh, 5000);
 
   const boothUrl = typeof window !== "undefined" ? window.location.origin : "";
 
