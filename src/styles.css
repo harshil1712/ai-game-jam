@@ -4,10 +4,170 @@
 @source "../node_modules/streamdown/dist/*.js";
 @source "../node_modules/@streamdown/code/dist/*.js";
 
+:root {
+  /* Cloudflare Console Color Palette */
+  --bg-deep-black: #050505;
+  --bg-charcoal: #111111;
+  --cf-orange: #f48120;
+  --cf-orange-light: #ffb020;
+  --cf-orange-dark: #d9650d;
+  --cf-blue: #0055ff;
+  --cf-dark-gray: #1d1f20;
+  --cf-mid-gray: #3c3e40;
+  --cf-light-gray: #8e8e8e;
+  --text-white: #ffffff;
+  --text-dim: #8e8e8e;
+  --border-color: #f48120;
+  --shadow-offset: 4px;
+
+  /* Typography */
+  --font-display: "Chakra Petch", sans-serif;
+  --font-mono: "Space Mono", monospace;
+}
+
 html,
 body,
 #root {
   width: 100%;
   height: 100%;
   margin: 0;
+  background-color: var(--bg-deep-black);
+  font-family: var(--font-mono);
+  color: var(--text-white);
+}
+
+/* Typography Utilities */
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* CRT Scanline Overlay */
+.crt-overlay {
+  position: relative;
+}
+
+.crt-overlay::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  z-index: 9999;
+}
+
+/* Glowing Text Effects */
+.text-glow-cyan {
+  text-shadow:
+    0 0 10px var(--cf-orange),
+    0 0 20px var(--cf-orange);
+}
+
+.text-glow-green {
+  text-shadow:
+    0 0 10px var(--cf-orange-light),
+    0 0 20px var(--cf-orange-light);
+}
+
+.text-glow-magenta {
+  text-shadow:
+    0 0 10px var(--cf-blue),
+    0 0 20px var(--cf-blue);
+}
+
+/* Box Glow Effects */
+.box-glow-cyan {
+  box-shadow:
+    0 0 10px var(--cf-orange),
+    0 0 20px rgba(244, 129, 32, 0.3);
+}
+
+.box-glow-green {
+  box-shadow:
+    0 0 10px var(--cf-orange-light),
+    0 0 20px rgba(255, 176, 32, 0.3);
+}
+
+/* Brutalist Offset Shadow */
+.shadow-brutalist-cyan {
+  box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--cf-orange);
+}
+
+.shadow-brutalist-magenta {
+  box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--cf-blue);
+}
+
+.shadow-brutalist-green {
+  box-shadow: var(--shadow-offset) var(--shadow-offset) 0px
+    var(--cf-orange-light);
+}
+
+/* Blinking Cursor */
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.cursor-blink::after {
+  content: "_";
+  animation: blink 1s infinite;
+}
+
+/* Chamfered Corners using clip-path */
+.chamfer-br {
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 12px),
+    calc(100% - 12px) 100%,
+    0 100%
+  );
+}
+
+.chamfer-tr {
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
+}
+
+/* Grid Pattern Background */
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(244, 129, 32, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(244, 129, 32, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* Hardware LED Indicator */
+.led-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  box-shadow: 0 0 6px currentColor;
+}
+
+.led-on {
+  color: var(--cf-orange);
+  background-color: var(--cf-orange);
+}
+
+.led-off {
+  color: #333;
+  background-color: #333;
 }
