@@ -12,14 +12,14 @@ import {
   ArrowSquareOutIcon,
   CopyIcon,
   CheckIcon,
-  GearIcon,
+  BrainIcon,
+  CaretDownIcon,
 } from "@phosphor-icons/react";
 import { isToolUIPart } from "ai";
 import type { ChatAgent } from "../../server";
 import { ToolPartView } from "../../components/ToolPartView";
 import { AppHeader } from "../../components/AppHeader";
 import { CyberButton } from "../../components/CyberButton";
-import { CyberSurface } from "../../components/CyberSurface";
 import { useGameUrl } from "../../hooks/useGameUrl";
 
 export const Route = createFileRoute("/_authed/chat")({
@@ -91,11 +91,6 @@ function ChatPage() {
     "Make a bouncing balls simulation",
   ];
 
-  const showThinking =
-    isStreaming &&
-    messages.length > 0 &&
-    messages[messages.length - 1].role === "user";
-
   return (
     <div className="flex flex-col h-screen bg-bg-deep">
       <AppHeader
@@ -165,19 +160,75 @@ function ChatPage() {
 
                 return (
                   <div key={message.id} className="space-y-2">
-                    {message.parts.filter(isToolUIPart).map((part) => (
-                      <ToolPartView key={part.toolCallId} part={part} />
-                    ))}
+                    {message.parts.map((part, i) => {
+                      // Tool invocation parts
+                      if (isToolUIPart(part)) {
+                        return (
+                          <ToolPartView key={part.toolCallId} part={part} />
+                        );
+                      }
 
-                    {message.parts
-                      .filter((part) => part.type === "text")
-                      .map((part, i) => {
+                      // Reasoning parts
+                      if (part.type === "reasoning") {
+                        const reasoning = part as {
+                          type: "reasoning";
+                          text: string;
+                          state?: "streaming" | "done";
+                        };
+                        if (!reasoning.text?.trim()) return null;
+                        const isDone =
+                          reasoning.state === "done" || !isStreaming;
+
+                        return (
+                          <div
+                            key={`reasoning-${i}`}
+                            className="flex justify-start"
+                          >
+                            <details
+                              className="max-w-[80%] w-full group"
+                              open={!isDone}
+                            >
+                              <summary className="flex items-center gap-2 cursor-pointer px-3 py-2 border-l-2 border-purple-500 bg-purple-500/10 text-xs font-mono uppercase select-none list-none [&::-webkit-details-marker]:hidden">
+                                <BrainIcon
+                                  size={14}
+                                  className="text-purple-400"
+                                />
+                                <span className="text-purple-300 font-bold">
+                                  REASONING
+                                </span>
+                                {isDone ? (
+                                  <span className="text-purple-500">
+                                    COMPLETE
+                                  </span>
+                                ) : (
+                                  <span className="text-purple-300 animate-pulse">
+                                    THINKING...
+                                  </span>
+                                )}
+                                <CaretDownIcon
+                                  size={12}
+                                  className="ml-auto text-purple-500 transition-transform group-open:rotate-180"
+                                />
+                              </summary>
+                              <pre className="mt-0 px-3 py-2 border-l-2 border-purple-500/50 bg-bg-charcoal text-sm text-slate-400 whitespace-pre-wrap overflow-auto max-h-64">
+                                {reasoning.text}
+                              </pre>
+                            </details>
+                          </div>
+                        );
+                      }
+
+                      // Text parts
+                      if (part.type === "text") {
                         const text = (part as { text: string }).text;
                         if (!text) return null;
 
                         if (isUser) {
                           return (
-                            <div key={i} className="flex justify-start">
+                            <div
+                              key={`text-${i}`}
+                              className="flex justify-start"
+                            >
                               <div className="max-w-[80%] px-0 py-1 text-white font-mono leading-relaxed">
                                 <span className="text-cf-orange mr-2">
                                   {">"}
@@ -189,7 +240,7 @@ function ChatPage() {
                         }
 
                         return (
-                          <div key={i} className="flex justify-start">
+                          <div key={`text-${i}`} className="flex justify-start">
                             <div className="max-w-[80%] border-l-2 border-cf-orange bg-bg-charcoal text-slate-200 leading-relaxed">
                               <Streamdown
                                 className="sd-theme p-3"
@@ -202,26 +253,14 @@ function ChatPage() {
                             </div>
                           </div>
                         );
-                      })}
+                      }
+
+                      // step-start, source, file, etc. — skip
+                      return null;
+                    })}
                   </div>
                 );
               })}
-
-              {showThinking && (
-                <div className="flex justify-start">
-                  <CyberSurface className="max-w-[80%] px-4 py-2.5">
-                    <div className="flex items-center gap-2">
-                      <GearIcon
-                        size={14}
-                        className="text-cf-orange animate-spin"
-                      />
-                      <span className="text-xs text-cf-orange font-mono uppercase">
-                        Processing...
-                      </span>
-                    </div>
-                  </CyberSurface>
-                </div>
-              )}
 
               <div ref={messagesEndRef} />
             </div>

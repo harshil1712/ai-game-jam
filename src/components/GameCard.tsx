@@ -12,7 +12,7 @@ interface GameCardProps {
 export function GameCard({
   game,
   onVote,
-  voteDisabled = false,
+  voteDisabled = false
 }: GameCardProps) {
   return (
     <CyberSurface className="chamfer-br shadow-brutalist-magenta flex flex-col hover:border-cf-orange transition-colors border-2">

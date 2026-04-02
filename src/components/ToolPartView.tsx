@@ -2,7 +2,8 @@ import { Badge } from "@cloudflare/kumo";
 import {
   RocketLaunchIcon,
   CheckCircleIcon,
-  GearIcon
+  GearIcon,
+  WarningCircleIcon,
 } from "@phosphor-icons/react";
 import { isToolUIPart, getToolName, type UIMessage } from "ai";
 import { CyberSurface } from "./CyberSurface";
@@ -27,8 +28,8 @@ export function ToolPartView({ part }: { part: UIMessage["parts"][number] }) {
         <CyberSurface className="max-w-[80%] px-4 py-2.5">
           <div className="flex items-center gap-2">
             <GearIcon size={14} className="text-cf-orange animate-spin" />
-            <span className="text-xs text-cf-orange font-mono uppercase">
-              {">"} BUILDING {displayName}...
+            <span className="text-sm text-cf-orange font-mono uppercase">
+              {">"} {displayName}...
             </span>
           </div>
         </CyberSurface>
@@ -49,7 +50,7 @@ export function ToolPartView({ part }: { part: UIMessage["parts"][number] }) {
             ) : (
               <GearIcon size={14} className="text-cf-orange animate-spin" />
             )}
-            <span className="text-xs text-cf-orange font-mono uppercase">
+            <span className="text-sm text-cf-orange font-mono uppercase">
               {isGame
                 ? "{'>'} DEPLOYING ARCHIVE..."
                 : `{'>'} EXECUTING ${displayName}...`}
@@ -70,7 +71,7 @@ export function ToolPartView({ part }: { part: UIMessage["parts"][number] }) {
             ) : (
               <GearIcon size={14} className="text-cf-orange" />
             )}
-            <span className="text-xs font-bold text-cf-orange-light font-mono uppercase">
+            <span className="text-sm font-bold text-cf-orange-light font-mono uppercase">
               {isGame ? "[ARCHIVE DEPLOYED]" : `[${displayName}]`}
             </span>
             <Badge
@@ -80,6 +81,34 @@ export function ToolPartView({ part }: { part: UIMessage["parts"][number] }) {
               OK
             </Badge>
           </div>
+        </CyberSurface>
+      </div>
+    );
+  }
+
+  if (part.state === "output-error") {
+    const errorText =
+      "errorText" in part
+        ? (part as { errorText: string }).errorText
+        : "Unknown error";
+    return (
+      <div className="flex justify-start">
+        <CyberSurface className="max-w-[80%] px-4 py-2.5">
+          <div className="flex items-center gap-2">
+            <WarningCircleIcon size={14} className="text-red-500" />
+            <span className="text-sm font-bold text-red-400 font-mono uppercase">
+              [{displayName}] ERROR
+            </span>
+            <Badge
+              variant="secondary"
+              className="rounded-none border border-red-500 text-red-400 bg-black font-mono text-[10px]"
+            >
+              FAIL
+            </Badge>
+          </div>
+          <p className="text-xs text-red-400/70 font-mono mt-1 truncate">
+            {errorText}
+          </p>
         </CyberSurface>
       </div>
     );
