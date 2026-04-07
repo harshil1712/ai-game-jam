@@ -9,6 +9,7 @@ declare namespace Cloudflare {
 		DB: D1Database;
 		LOADER: WorkerLoader;
 		AI: Ai;
+		SESSION_SECRET: string;
 		ChatAgent: DurableObjectNamespace<import("./src/server").ChatAgent>;
 	}
 }
