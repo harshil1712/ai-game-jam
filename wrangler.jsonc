@@ -12,7 +12,7 @@
     {
       "binding": "DB",
       "database_name": "ai-game-jam-db",
-      "database_id": "PLACEHOLDER_DB_ID"
+      "database_id": "b0dd5203-6dcd-4f09-a0f7-f3978cea2842"
     }
   ],
   "worker_loaders": [
