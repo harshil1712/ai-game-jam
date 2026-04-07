@@ -1,4 +1,4 @@
-import { Link, useRouter } from "@tanstack/react-router";
+import { Link, useRouter, useLocation } from "@tanstack/react-router";
 import { CyberButton } from "./CyberButton";
 import { HelpModal, useHelpModal } from "./HelpModal";
 import { logout } from "../lib/api";
@@ -6,6 +6,7 @@ import { logout } from "../lib/api";
 export function AppHeader() {
   const help = useHelpModal();
   const router = useRouter();
+  const location = useLocation();
 
   const handleLogout = async () => {
     await logout();
@@ -18,7 +19,14 @@ export function AppHeader() {
       <header className="px-5 py-3 bg-bg-charcoal border-b-2 border-cf-orange">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Link to="/chat">
+            <Link
+              to="/chat"
+              onClick={(e) => {
+                if (location.pathname === "/chat") {
+                  e.preventDefault();
+                }
+              }}
+            >
               <h1 className="text-2xl font-bold text-white font-display text-glow-cyan tracking-widest uppercase hover:text-cf-orange transition-colors">
                 AI GAME JAM
               </h1>
