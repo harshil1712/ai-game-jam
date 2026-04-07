@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useAgent } from "agents/react";
 import { useAgentChat } from "@cloudflare/ai-chat/react";
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { InputArea } from "@cloudflare/kumo";
 import { Streamdown } from "streamdown";
 import { code } from "@streamdown/code";
@@ -9,18 +9,15 @@ import {
   PaperPlaneRightIcon,
   StopIcon,
   TrashIcon,
-  ArrowSquareOutIcon,
-  CopyIcon,
-  CheckIcon,
   BrainIcon,
   CaretDownIcon,
 } from "@phosphor-icons/react";
-import { isToolUIPart } from "ai";
+
+import { isToolUIPart, getToolName } from "ai";
 import type { ChatAgent } from "../../server";
 import { ToolPartView } from "../../components/ToolPartView";
 import { AppHeader } from "../../components/AppHeader";
 import { CyberButton } from "../../components/CyberButton";
-import { useGameUrl } from "../../hooks/useGameUrl";
 
 export const Route = createFileRoute("/_authed/chat")({
   component: ChatPage,
@@ -30,7 +27,6 @@ function ChatPage() {
   const { user } = Route.useRouteContext();
   const [connected, setConnected] = useState(false);
   const [input, setInput] = useState("");
-  const [copied, setCopied] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -45,8 +41,23 @@ function ChatPage() {
     agent,
   });
 
-  const gameUrl = useGameUrl(messages);
   const isStreaming = status === "streaming" || status === "submitted";
+
+  const latestGameToolCallId = useMemo(() => {
+    let lastId: string | null = null;
+    for (const msg of messages) {
+      for (const part of msg.parts) {
+        if (
+          isToolUIPart(part) &&
+          getToolName(part) === "generateGame" &&
+          part.state === "output-available"
+        ) {
+          lastId = part.toolCallId;
+        }
+      }
+    }
+    return lastId;
+  }, [messages]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -72,16 +83,6 @@ function ChatPage() {
       textareaRef.current.style.height = "auto";
     }
   }, [input, isStreaming, sendMessage]);
-
-  const copyGameUrl = async () => {
-    if (gameUrl) {
-      await navigator.clipboard.writeText(
-        `${window.location.origin}${gameUrl}`,
-      );
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
 
   const suggestedPrompts = [
     "Build me a Snake game",
@@ -115,8 +116,7 @@ function ChatPage() {
         }
       />
 
-      <div className="flex-1 flex overflow-hidden max-w-6xl mx-auto w-full">
-        <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col overflow-hidden max-w-3xl mx-auto w-full">
           <div className="flex-1 overflow-y-auto px-5 py-6">
             {messages.length === 0 && (
               <div className="text-center py-12">
@@ -164,7 +164,11 @@ function ChatPage() {
                       // Tool invocation parts
                       if (isToolUIPart(part)) {
                         return (
-                          <ToolPartView key={part.toolCallId} part={part} />
+                          <ToolPartView
+                            key={part.toolCallId}
+                            part={part}
+                            isLatestGame={part.toolCallId === latestGameToolCallId}
+                          />
                         );
                       }
 
@@ -313,74 +317,7 @@ function ChatPage() {
               )}
             </div>
           </div>
-        </div>
-
-        {gameUrl && (
-          <div className="w-96 border-l-2 border-cf-mid-gray bg-bg-charcoal p-4 hidden lg:flex flex-col">
-            <div className="flex items-center justify-between mb-4 border-b-2 border-cf-mid-gray pb-2">
-              <h3 className="font-bold text-white font-display tracking-wider uppercase text-sm text-glow-cyan">
-                PREVIEW_UNIT
-              </h3>
-              <div className="flex gap-2">
-                <CyberButton
-                  cyber="secondary"
-                  size="sm"
-                  icon={
-                    copied ? <CheckIcon size={14} /> : <CopyIcon size={14} />
-                  }
-                  onClick={copyGameUrl}
-                >
-                  {copied ? "COPIED" : "COPY"}
-                </CyberButton>
-                <a href={gameUrl} target="_blank" rel="noopener noreferrer">
-                  <CyberButton
-                    size="sm"
-                    icon={<ArrowSquareOutIcon size={14} />}
-                  >
-                    OPEN
-                  </CyberButton>
-                </a>
-              </div>
-            </div>
-            <div className="flex-1 border-16 border-cf-dark-gray shadow-[inset_0_0_20px_rgba(0,0,0,0.8)] bg-black overflow-hidden">
-              <iframe
-                src={gameUrl}
-                className="w-full h-full border-0"
-                sandbox="allow-scripts"
-                title="Game Preview"
-              />
-            </div>
-            <div className="mt-2 flex justify-between items-center">
-              <span className="text-[10px] text-cf-light-gray font-mono uppercase">
-                Status: RUNNING
-              </span>
-              <div className="flex gap-1">
-                <div className="w-2 h-2 bg-cf-orange box-glow-green"></div>
-                <div className="w-2 h-2 bg-cf-orange box-glow-green"></div>
-                <div className="w-2 h-2 bg-cf-mid-gray"></div>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
-
-      {gameUrl && (
-        <a
-          href={gameUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="lg:hidden fixed bottom-20 right-4 z-50"
-        >
-          <CyberButton
-            variant="primary"
-            size="lg"
-            icon={<ArrowSquareOutIcon size={20} />}
-            className="shadow-brutalist-cyan"
-          >
-            LAUNCH
-          </CyberButton>
-        </a>
-      )}
     </div>
   );
 }
