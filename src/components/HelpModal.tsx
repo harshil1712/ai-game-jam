@@ -12,14 +12,14 @@ const RESOURCES = [
       {
         label: "Dynamic Workers (Worker Loaders)",
         description: "Run AI-generated code in isolated sandboxes",
-        url: "https://developers.cloudflare.com/dynamic-workers/",
+        url: "https://developers.cloudflare.com/dynamic-workers/"
       },
       {
         label: "Agents SDK",
         description: "Build stateful AI agents on Cloudflare Workers",
-        url: "https://developers.cloudflare.com/agents/",
-      },
-    ],
+        url: "https://developers.cloudflare.com/agents/"
+      }
+    ]
   },
   {
     category: "CLOUDFLARE_PRODUCTS",
@@ -27,20 +27,20 @@ const RESOURCES = [
       {
         label: "Workers AI",
         description: "Run AI models at the edge, no API key needed",
-        url: "https://developers.cloudflare.com/workers-ai/",
+        url: "https://developers.cloudflare.com/workers-ai/"
       },
       {
         label: "D1",
         description: "Serverless SQLite at the edge",
-        url: "https://developers.cloudflare.com/d1/",
+        url: "https://developers.cloudflare.com/d1/"
       },
       {
         label: "Durable Objects",
         description: "Stateful, globally consistent Workers",
-        url: "https://developers.cloudflare.com/durable-objects/",
-      },
-    ],
-  },
+        url: "https://developers.cloudflare.com/durable-objects/"
+      }
+    ]
+  }
 ];
 
 interface HelpModalProps {
@@ -182,6 +182,6 @@ export function useHelpModal() {
   return {
     isOpen,
     open: () => setIsOpen(true),
-    close: () => setIsOpen(false),
+    close: () => setIsOpen(false)
   };
 }

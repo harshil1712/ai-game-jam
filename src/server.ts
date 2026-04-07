@@ -1,6 +1,7 @@
 import { routeAgentRequest } from "agents";
 import {
   handleLogin,
+  handleLogout,
   handleMe,
   handleGallery,
   handleVote,
@@ -24,6 +25,7 @@ export default {
 
     // API routes
     if (path === "/api/login") return handleLogin(request, env);
+    if (path === "/api/logout") return handleLogout(request, env);
     if (path === "/api/me") return handleMe(request, env);
     if (path === "/api/gallery") return handleGallery(request, env);
     if (path === "/api/stats") return handleStats(request, env);
