@@ -100,7 +100,7 @@ function ChatPage() {
           <>
             <Link to="/gallery">
               <CyberButton variant="secondary" size="sm">
-                ARCHIVE
+                GALLERY
               </CyberButton>
             </Link>
             <CyberButton
