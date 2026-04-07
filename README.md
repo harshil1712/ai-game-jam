@@ -1,236 +1,188 @@
-# Agent Starter
+# AI Game Jam
 
-![npm i agents command](./npm-agents-banner.svg)
+A game jam demo for showcasing [Cloudflare Dynamic Workers](https://developers.cloudflare.com/workers/runtime-apis/worker-loaders/) as a primitive for running AI-generated code instantly in secure, isolated sandboxes.
 
-<a href="https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/agents-starter"><img src="https://deploy.workers.cloudflare.com/button" alt="Deploy to Cloudflare"/></a>
+Users visit the URL, log in with a name and email, then chat with an AI agent that generates complete browser games. Each game is instantly deployed as a sandboxed Dynamic Worker at a unique URL. Users can iterate via chat, share links, and vote for favorites in a live gallery.
 
-A starter template for building AI chat agents on Cloudflare, powered by the [Agents SDK](https://developers.cloudflare.com/agents/).
+## What It Demonstrates
 
-Uses Workers AI (no API key required), with tools for weather, timezone detection, calculations with approval, task scheduling, and vision (image input).
+| Cloudflare Product                                                                                         | Role                                                                                                             |
+| ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| [Dynamic Workers (Worker Loaders)](https://developers.cloudflare.com/workers/runtime-apis/worker-loaders/) | Hero feature: AI-generated HTML/JS games run in isolated Workers with no network access (`globalOutbound: null`) |
+| [Agents SDK](https://developers.cloudflare.com/agents/)                                                    | `AIChatAgent` Durable Object for persistent per-user chat with tool-calling                                      |
+| [Workers AI](https://developers.cloudflare.com/workers-ai/)                                                | Model inference using `@cf/moonshotai/kimi-k2.5` (no API key needed)                                             |
+| [D1](https://developers.cloudflare.com/d1/)                                                                | SQLite database for users, games, and votes                                                                      |
+| [Durable Objects](https://developers.cloudflare.com/durable-objects/)                                      | Backs each user's agent instance with persistent conversation state                                              |
 
-## Quick start
+## Tech Stack
 
-```bash
-npx create-cloudflare@latest --template cloudflare/agents-starter
-cd agents-starter
-npm install
-npm run dev
-```
+- **[React 19](https://react.dev/)** + **[TanStack Router](https://tanstack.com/router)** — file-based routing, type-safe
+- **[Tailwind CSS v4](https://tailwindcss.com/)** + **[@cloudflare/kumo](https://developers.cloudflare.com/style-guide/)** — Cloudflare design system
+- **[Vite](https://vite.dev/)** — frontend build
+- **[Wrangler](https://developers.cloudflare.com/workers/wrangler/)** — local dev + deployment
 
-Open [http://localhost:5173](http://localhost:5173) to see your agent in action.
-
-Try these prompts to see the different features:
-
-- **"What's the weather in Paris?"** — server-side tool (runs automatically)
-- **"What timezone am I in?"** — client-side tool (browser provides the answer)
-- **"Calculate 5000 \* 3"** — approval tool (asks you before running)
-- **"Remind me in 5 minutes to take a break"** — scheduling
-- **Drop an image and ask "What's in this image?"** — vision (image understanding)
-
-## Project structure
+## Project Structure
 
 ```
 src/
-  server.ts    # Chat agent with tools and scheduling
-  app.tsx      # Chat UI built with Kumo components
-  client.tsx   # React entry point
-  styles.css   # Tailwind + Kumo styles
+  server.ts              # Worker entry: routes requests, re-exports ChatAgent
+  types.ts               # Shared TypeScript interfaces
+  styles.css             # Tailwind v4 + Kumo + retro cyber theme
+  server/
+    agent.ts             # ChatAgent (AIChatAgent DO) with generateGame, listMyGames, loadGame tools
+    routes.ts            # API handlers: login, gallery, vote, stats, game dispatch
+    auth.ts              # HMAC-SHA256 cookie session auth
+    utils.ts             # Shared response helpers
+  components/
+    AppHeader.tsx        # Page header with help icon
+    HelpModal.tsx        # Resource links modal
+    CyberButton.tsx      # Themed button variants
+    CyberSurface.tsx     # Themed surface/card wrapper
+    GameCard.tsx         # Gallery game card with vote + launch
+    ToolPartView.tsx     # Renders AI tool call states + inline game preview iframe
+  hooks/
+    usePolling.ts        # setInterval-based polling hook
+  lib/
+    api.ts               # Typed client API functions
+  routes/
+    __root.tsx           # Root layout: auth context, dark mode
+    index.tsx            # / — Login page
+    _authed.tsx          # Auth guard layout
+    _authed/
+      chat.tsx           # /chat — AI game builder chat interface
+      gallery.tsx        # /gallery — Game gallery with voting
+    dashboard.tsx        # /dashboard — Booth ambient display (no auth)
+schema.sql               # D1 schema: users, games, votes
+wrangler.jsonc           # Cloudflare config: AI, D1, Worker Loaders, DO, assets
 ```
 
-## What's included
+## Prerequisites
 
-- **AI Chat** — Streaming responses powered by Workers AI via `AIChatAgent`
-- **Image input** — Drag-and-drop, paste, or click to attach images for vision-capable models
-- **Three tool patterns** — server-side auto-execute, client-side (browser), and human-in-the-loop approval
-- **Scheduling** — one-time, delayed, and recurring (cron) tasks
-- **Reasoning display** — shows model thinking as it streams, collapses when done
-- **Debug mode** — toggle in the header to inspect raw message JSON for each message
-- **Kumo UI** — Cloudflare's design system with dark/light mode
-- **Real-time** — WebSocket connection with automatic reconnection and message persistence
+- [Node.js](https://nodejs.org/) 18+
+- A [Cloudflare account](https://dash.cloudflare.com/sign-up) (free)
+- [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/install-and-update/) (`npm install -g wrangler`)
 
-## Making it your own
+## Setup
 
-### Name your project
-
-Update the name in `package.json` and `wrangler.jsonc` — the `name` in `wrangler.jsonc` becomes your deployed Worker's URL (`<name>.<subdomain>.workers.dev`).
-
-### Change the system prompt
-
-Edit the `system` string in `server.ts` to give your agent a different personality or focus area. This is the most impactful single change you can make.
-
-### Replace the demo tools with real ones
-
-The starter ships with demo tools (`getWeather` returns random data, `calculate` does basic arithmetic). Replace them with real implementations:
-
-```ts
-// In server.ts, replace a demo tool with a real API call:
-getWeather: tool({
-  description: "Get the current weather for a city",
-  inputSchema: z.object({ city: z.string() }),
-  execute: async ({ city }) => {
-    const res = await fetch(`https://api.weather.example/${city}`);
-    return res.json();
-  }
-}),
-```
-
-### Add your own tools
-
-Add new tools to the `tools` object in `server.ts`. There are three patterns:
-
-```ts
-// Auto-execute: runs on the server, no user interaction
-myTool: tool({
-  description: "...",
-  inputSchema: z.object({ /* ... */ }),
-  execute: async (input) => { /* return result */ }
-}),
-
-// Client-side: no execute function, browser provides the result
-// Handle it in app.tsx via the onToolCall callback
-browserTool: tool({
-  description: "...",
-  inputSchema: z.object({ /* ... */ })
-}),
-
-// Approval: add needsApproval to gate execution
-sensitiveTool: tool({
-  description: "...",
-  inputSchema: z.object({ /* ... */ }),
-  needsApproval: async (input) => true, // or conditional logic
-  execute: async (input) => { /* runs after approval */ }
-}),
-```
-
-### Customize scheduled task behavior
-
-When a scheduled task fires, `executeTask` runs on the server. It does its work and then uses `this.broadcast()` to notify connected clients (shown as a toast notification in the UI). Replace it with your own logic:
-
-```ts
-async executeTask(description: string, task: Schedule<string>) {
-  // Do the actual work
-  await sendEmail({ to: "user@example.com", subject: description });
-
-  // Notify connected clients
-  this.broadcast(
-    JSON.stringify({ type: "scheduled-task", description, timestamp: new Date().toISOString() })
-  );
-}
-```
-
-> **Why `broadcast()` instead of `saveMessages()`?** Injecting into chat history can cause the AI to see the notification as new context and re-trigger the same task in a loop. `broadcast()` sends a one-off event that the client displays separately from the conversation.
-
-### Remove scheduling
-
-If you don't need scheduling, remove `scheduleTask`, `getScheduledTasks`, and `cancelScheduledTask` from the tools object, the `executeTask` method, and the schedule-related imports (`getSchedulePrompt`, `scheduleSchema`, `Schedule`, `generateId`).
-
-### Add state beyond chat messages
-
-Use `this.setState()` and `this.state` for real-time state that syncs to all connected clients. See [Store and sync state](https://developers.cloudflare.com/agents/api-reference/store-and-sync-state/).
-
-### Add callable methods
-
-Expose agent methods as typed RPC that your client can call directly:
-
-```ts
-import { callable } from "agents";
-
-export class ChatAgent extends AIChatAgent<Env> {
-  @callable()
-  async getStats() {
-    return { messageCount: this.messages.length };
-  }
-}
-
-// Client-side:
-const stats = await agent.call("getStats");
-```
-
-See [Callable methods](https://developers.cloudflare.com/agents/api-reference/callable-methods/).
-
-### Connect to MCP servers
-
-Add external tools from MCP servers:
-
-```ts
-async onChatMessage(onFinish, options) {
-  // Connect to an MCP server
-  await this.mcp.connect("https://my-mcp-server.example/sse");
-
-  const result = streamText({
-    // ...
-    tools: {
-      ...myTools,
-      ...this.mcp.getAITools() // Include MCP tools
-    }
-  });
-}
-```
-
-See [MCP Client API](https://developers.cloudflare.com/agents/api-reference/mcp-client-api/).
-
-## Use a different AI model provider
-
-The starter uses [Workers AI](https://developers.cloudflare.com/workers-ai/) by default (no API key needed). To use a different provider:
-
-### OpenAI
+### 1. Clone and install
 
 ```bash
-npm install @ai-sdk/openai
+git clone https://github.com/harshil1712/ai-game-jam.git
+cd ai-game-jam
+npm install
 ```
 
-```ts
-// In server.ts, replace the model:
-import { openai } from "@ai-sdk/openai";
-
-// Inside onChatMessage:
-const result = streamText({
-  model: openai("gpt-5.2")
-  // ...
-});
-```
-
-Create a `.env` file with your API key:
-
-```
-OPENAI_API_KEY=your-key-here
-```
-
-### Anthropic
+### 2. Create the D1 database
 
 ```bash
-npm install @ai-sdk/anthropic
+npx wrangler d1 create ai-game-jam-db
 ```
 
-```ts
-import { anthropic } from "@ai-sdk/anthropic";
+Copy the `database_id` from the output and update `wrangler.jsonc`:
 
-const result = streamText({
-  model: anthropic("claude-sonnet-4-20250514")
-  // ...
-});
+```jsonc
+"d1_databases": [
+  {
+    "binding": "DB",
+    "database_name": "ai-game-jam-db",
+    "database_id": "<your-database-id>"  // replace this
+  }
+]
 ```
 
-Create a `.env` file with your API key:
+### 3. Apply the database schema
 
-```
-ANTHROPIC_API_KEY=your-key-here
+```bash
+# For local development:
+npx wrangler d1 execute ai-game-jam-db --local --file=schema.sql
+
+# For production:
+npx wrangler d1 execute ai-game-jam-db --file=schema.sql
 ```
 
-## Deploy
+### 4. Set a session secret
+
+Update the `SESSION_SECRET` in `wrangler.jsonc` (or use a [Wrangler secret](https://developers.cloudflare.com/workers/configuration/secrets/) in production):
+
+```bash
+npx wrangler secret put SESSION_SECRET
+```
+
+### 5. Run locally
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:5173](http://localhost:5173) to see the app.
+
+### 6. Deploy
 
 ```bash
 npm run deploy
 ```
 
-Your agent is live on Cloudflare's global network. Messages persist in SQLite, streams resume on disconnect, and the agent hibernates when idle.
+Your app is live on Cloudflare's global network.
 
-## Learn more
+## How It Works
 
-- [Agents SDK documentation](https://developers.cloudflare.com/agents/)
-- [Build a chat agent tutorial](https://developers.cloudflare.com/agents/getting-started/build-a-chat-agent/)
-- [Chat agents API reference](https://developers.cloudflare.com/agents/api-reference/chat-agents/)
-- [Workers AI models](https://developers.cloudflare.com/workers-ai/models/)
+1. **User logs in** with name + email. A signed HMAC-SHA256 session cookie is set.
+2. **User chats** with a `ChatAgent` (Durable Object backed by the Agents SDK). Each user gets their own persistent agent instance.
+3. **Agent generates a game** using Workers AI (`kimi-k2.5`). The `generateGame` tool receives the AI-produced HTML/JS and calls `LOADER.run()` to spin up a sandboxed Dynamic Worker on the fly.
+4. **Game is served** at `/app/{gameId}`. The Dynamic Worker has `globalOutbound: null` — it can't make outbound network requests, keeping it isolated.
+5. **Users vote** on games in the gallery. The `/dashboard` route shows a live leaderboard, stats, and QR codes for the booth display.
+
+## Key Implementation Details
+
+### Dynamic Workers (Worker Loaders)
+
+The core feature. In `src/server/routes.ts`, when serving a game:
+
+```ts
+const result = await env.LOADER.run(game.code, {
+  globalOutbound: null // no network access — sandboxed
+});
+return result.response;
+```
+
+And in `wrangler.jsonc`:
+
+```jsonc
+"worker_loaders": [
+  { "binding": "LOADER" }
+]
+```
+
+### AI Chat Agent
+
+The `ChatAgent` in `src/server/agent.ts` extends `AIChatAgent` from the Agents SDK. It exposes three tools:
+
+- `generateGame` — generates and deploys a new game
+- `listMyGames` — fetches the user's existing games
+- `loadGame` — loads a previous game into context for editing
+
+### Auth
+
+Simple HMAC-SHA256 signed cookie session (`src/server/auth.ts`). No OAuth — just name + email for the booth demo.
+
+## Learn More
+
+### Cloudflare Products
+
+- [Dynamic Workers (Worker Loaders)](https://developers.cloudflare.com/workers/runtime-apis/worker-loaders/) — run AI-generated code in isolated sandboxes
+- [Agents SDK](https://developers.cloudflare.com/agents/) — build stateful AI agents on Cloudflare Workers
+- [Build a Chat Agent](https://developers.cloudflare.com/agents/getting-started/build-a-chat-agent/) — step-by-step tutorial
+- [Workers AI](https://developers.cloudflare.com/workers-ai/) — run AI models at the edge, no API key needed
+- [Workers AI Models](https://developers.cloudflare.com/workers-ai/models/) — full model catalog
+- [D1](https://developers.cloudflare.com/d1/) — serverless SQLite at the edge
+- [Durable Objects](https://developers.cloudflare.com/durable-objects/) — stateful, globally consistent Workers
+- [Workers Platform Limits](https://developers.cloudflare.com/workers/platform/limits/) — CPU, memory, and request limits
+
+### Frontend
+
+- [TanStack Router](https://tanstack.com/router) — type-safe file-based routing for React
+- [Cloudflare Kumo](https://developers.cloudflare.com/style-guide/) — Cloudflare's design system
+- [Agents SDK React hooks](https://developers.cloudflare.com/agents/api-reference/agents-api/) — `useAgent`, `useAgentChat` for WebSocket chat
 
 ## License
 

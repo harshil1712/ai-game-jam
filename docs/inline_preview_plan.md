@@ -17,11 +17,11 @@ Add `isLatestGame: boolean` to the component's props:
 ```ts
 export function ToolPartView({
   part,
-  isLatestGame,
+  isLatestGame
 }: {
   part: UIMessage["parts"][number];
   isLatestGame?: boolean;
-})
+});
 ```
 
 #### New local state
@@ -41,7 +41,7 @@ import { useState } from "react";
 import {
   CopyIcon,
   CheckIcon,
-  ArrowSquareOutIcon,
+  ArrowSquareOutIcon
   // ... keep existing imports
 } from "@phosphor-icons/react";
 import { getToolName } from "ai"; // already imported
@@ -241,11 +241,13 @@ const latestGameToolCallId = useMemo(() => {
 #### Update the `ToolPartView` call site
 
 Currently:
+
 ```tsx
 <ToolPartView key={part.toolCallId} part={part} />
 ```
 
 Change to:
+
 ```tsx
 <ToolPartView
   key={part.toolCallId}
@@ -265,11 +267,10 @@ Delete the entire block from line 367 to line 383 (the `{gameUrl && (<a href={ga
 #### Simplify the outer layout
 
 Currently the outer content wrapper is:
+
 ```tsx
 <div className="flex-1 flex overflow-hidden max-w-6xl mx-auto w-full">
-  <div className="flex-1 flex flex-col min-w-0">
-    ...
-  </div>
+  <div className="flex-1 flex flex-col min-w-0">...</div>
   {/* right panel — deleted */}
 </div>
 ```
@@ -298,11 +299,11 @@ rm src/hooks/useGameUrl.ts
 
 ## Responsive Behavior Summary
 
-| Breakpoint | iframe behavior |
-|------------|----------------|
-| Mobile (`< sm`, ~375px) | Full column width, `border-8` CRT border, `aspect-[4/3]` → ~251px tall |
-| Mobile (`sm`, ~640px) | Full column width, `border-[12px]` CRT border, ~384px tall |
-| Tablet/Desktop (`md`+, 768px+) | Capped at `max-w-3xl`, `border-[12px]` CRT border, ~576px tall |
+| Breakpoint                     | iframe behavior                                                        |
+| ------------------------------ | ---------------------------------------------------------------------- |
+| Mobile (`< sm`, ~375px)        | Full column width, `border-8` CRT border, `aspect-[4/3]` → ~251px tall |
+| Mobile (`sm`, ~640px)          | Full column width, `border-[12px]` CRT border, ~384px tall             |
+| Tablet/Desktop (`md`+, 768px+) | Capped at `max-w-3xl`, `border-[12px]` CRT border, ~576px tall         |
 
 All breakpoints are fully interactive — no "open in new tab" workaround needed.
 

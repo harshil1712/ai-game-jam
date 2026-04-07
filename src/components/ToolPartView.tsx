@@ -6,7 +6,7 @@ import {
   WarningCircleIcon,
   CopyIcon,
   CheckIcon,
-  ArrowSquareOutIcon,
+  ArrowSquareOutIcon
 } from "@phosphor-icons/react";
 import { isToolUIPart, getToolName, type UIMessage } from "ai";
 import { useState } from "react";
@@ -21,7 +21,7 @@ function formatToolName(name: string): string {
 
 export function ToolPartView({
   part,
-  isLatestGame,
+  isLatestGame
 }: {
   part: UIMessage["parts"][number];
   isLatestGame?: boolean;
@@ -108,7 +108,13 @@ export function ToolPartView({
                       <CyberButton
                         cyber="secondary"
                         size="sm"
-                        icon={copied ? <CheckIcon size={14} /> : <CopyIcon size={14} />}
+                        icon={
+                          copied ? (
+                            <CheckIcon size={14} />
+                          ) : (
+                            <CopyIcon size={14} />
+                          )
+                        }
                         onClick={async () => {
                           await navigator.clipboard.writeText(
                             `${window.location.origin}${gameUrl}`
@@ -121,8 +127,15 @@ export function ToolPartView({
                       </CyberButton>
                     )}
                     {gameUrl && (
-                      <a href={gameUrl} target="_blank" rel="noopener noreferrer">
-                        <CyberButton size="sm" icon={<ArrowSquareOutIcon size={14} />}>
+                      <a
+                        href={gameUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <CyberButton
+                          size="sm"
+                          icon={<ArrowSquareOutIcon size={14} />}
+                        >
                           OPEN
                         </CyberButton>
                       </a>
@@ -182,7 +195,10 @@ export function ToolPartView({
               </Badge>
               {gameUrl && (
                 <a href={gameUrl} target="_blank" rel="noopener noreferrer">
-                  <CyberButton size="sm" icon={<ArrowSquareOutIcon size={12} />}>
+                  <CyberButton
+                    size="sm"
+                    icon={<ArrowSquareOutIcon size={12} />}
+                  >
                     OPEN
                   </CyberButton>
                 </a>
