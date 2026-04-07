@@ -34,12 +34,12 @@ export function AppHeader({ title, actions }: AppHeaderProps) {
             {actions}
             <CyberButton
               cyber="ghost"
-              aria-label="Log out"
+              variant="secondary"
+              size="sm"
               onClick={handleLogout}
-              className="text-xs font-mono uppercase tracking-wider"
               title="Log out"
             >
-              Logout
+              LOGOUT
             </CyberButton>
             <CyberButton
               cyber="ghost"
