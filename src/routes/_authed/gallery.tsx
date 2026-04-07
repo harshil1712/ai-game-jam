@@ -1,6 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useCallback } from "react";
-import { ChatCircleDotsIcon } from "@phosphor-icons/react";
 import type { GalleryGame, GalleryData } from "../../types";
 import { fetchGallery, vote } from "../../lib/api";
 import { usePolling } from "../../hooks/usePolling";
@@ -41,16 +40,7 @@ function GalleryPage() {
 
   return (
     <div className="min-h-screen bg-bg-deep">
-      <AppHeader
-        title="ARCHIVE"
-        actions={
-          <Link to="/chat">
-            <CyberButton icon={<ChatCircleDotsIcon size={14} />}>
-              BUILDER
-            </CyberButton>
-          </Link>
-        }
-      />
+      <AppHeader />
 
       <main className="max-w-6xl mx-auto px-5 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

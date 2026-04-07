@@ -1,15 +1,9 @@
-import type { ReactNode } from "react";
 import { Link, useRouter } from "@tanstack/react-router";
 import { CyberButton } from "./CyberButton";
 import { HelpModal, useHelpModal } from "./HelpModal";
 import { logout } from "../lib/api";
 
-interface AppHeaderProps {
-  title: string;
-  actions?: ReactNode;
-}
-
-export function AppHeader({ title, actions }: AppHeaderProps) {
+export function AppHeader() {
   const help = useHelpModal();
   const router = useRouter();
 
@@ -26,12 +20,16 @@ export function AppHeader({ title, actions }: AppHeaderProps) {
           <div className="flex items-center gap-3">
             <Link to="/chat">
               <h1 className="text-2xl font-bold text-white font-display text-glow-cyan tracking-widest uppercase hover:text-cf-orange transition-colors">
-                {title}
+                AI GAME JAM
               </h1>
             </Link>
           </div>
           <div className="flex items-center gap-3">
-            {actions}
+            <Link to="/gallery">
+              <CyberButton variant="secondary" size="sm">
+                GALLERY
+              </CyberButton>
+            </Link>
             <CyberButton
               cyber="ghost"
               variant="secondary"

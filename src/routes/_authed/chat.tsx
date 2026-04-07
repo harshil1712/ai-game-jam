@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useAgent } from "agents/react";
 import { useAgentChat } from "@cloudflare/ai-chat/react";
 import { useState, useRef, useEffect, useCallback, useMemo } from "react";
@@ -94,29 +94,22 @@ function ChatPage() {
 
   return (
     <div className="flex flex-col h-screen bg-bg-deep">
-      <AppHeader
-        title="AI GAME JAM"
-        actions={
-          <>
-            <Link to="/gallery">
-              <CyberButton variant="secondary" size="sm">
-                GALLERY
-              </CyberButton>
-            </Link>
+      <AppHeader />
+
+      <div className="flex-1 flex flex-col overflow-hidden max-w-3xl mx-auto w-full">
+        {messages.length > 0 && (
+          <div className="flex justify-end px-5 pt-4">
             <CyberButton
               cyber="ghost"
               variant="secondary"
-              size="sm"
+              size="xs"
               icon={<TrashIcon size={14} />}
               onClick={clearHistory}
             >
               CLEAR
             </CyberButton>
-          </>
-        }
-      />
-
-      <div className="flex-1 flex flex-col overflow-hidden max-w-3xl mx-auto w-full">
+          </div>
+        )}
         <div className="flex-1 overflow-y-auto px-5 py-6">
           {messages.length === 0 && (
             <div className="text-center py-12">

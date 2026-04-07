@@ -50,7 +50,7 @@ function DashboardPage() {
   return (
     <div className="h-screen bg-bg-deep bg-grid overflow-hidden flex flex-col">
       {/* Header */}
-      <AppHeader title="COMMAND_CENTER" />
+      <AppHeader />
 
       {/* Main Content */}
       <main className="flex-1 p-8 overflow-hidden">
