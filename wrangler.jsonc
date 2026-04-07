@@ -11,8 +11,7 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "ai-game-jam-db",
-      "database_id": "b0dd5203-6dcd-4f09-a0f7-f3978cea2842"
+      "database_name": "ai-game-jam-db"
     }
   ],
   "worker_loaders": [
