@@ -12,7 +12,7 @@ export function CyberSurface({
 }: CyberSurfaceProps) {
   return (
     <Surface
-      className={`rounded-none border border-cf-mid-gray bg-bg-charcoal font-mono${glow ? " border-cf-orange shadow-brutalist-cyan" : ""} ${className}`}
+      className={`rounded-none border border-muted bg-surface font-mono${glow ? " border-accent shadow-brutalist-cyan" : ""} ${className}`}
       {...props}
     />
   );

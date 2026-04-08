@@ -12,14 +12,14 @@ const RESOURCES = [
       {
         label: "Dynamic Workers (Worker Loaders)",
         description: "Run AI-generated code in isolated sandboxes",
-        url: "https://developers.cloudflare.com/dynamic-workers/",
+        url: "https://developers.cloudflare.com/dynamic-workers/"
       },
       {
         label: "Agents SDK",
         description: "Build stateful AI agents on Cloudflare Workers",
-        url: "https://developers.cloudflare.com/agents/",
-      },
-    ],
+        url: "https://developers.cloudflare.com/agents/"
+      }
+    ]
   },
   {
     category: "CLOUDFLARE_PRODUCTS",
@@ -27,20 +27,20 @@ const RESOURCES = [
       {
         label: "Workers AI",
         description: "Run AI models at the edge, no API key needed",
-        url: "https://developers.cloudflare.com/workers-ai/",
+        url: "https://developers.cloudflare.com/workers-ai/"
       },
       {
         label: "D1",
         description: "Serverless SQLite at the edge",
-        url: "https://developers.cloudflare.com/d1/",
+        url: "https://developers.cloudflare.com/d1/"
       },
       {
         label: "Durable Objects",
         description: "Stateful, globally consistent Workers",
-        url: "https://developers.cloudflare.com/durable-objects/",
-      },
-    ],
-  },
+        url: "https://developers.cloudflare.com/durable-objects/"
+      }
+    ]
+  }
 ];
 
 interface HelpModalProps {
@@ -53,7 +53,7 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop */}
+      {/* Backdrop — intentionally dark in both themes to dim the page behind the modal */}
       <button
         type="button"
         aria-label="Close modal"
@@ -63,12 +63,12 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
 
       {/* Modal */}
       <CyberSurface
-        className="relative z-10 w-full max-w-lg border-2 border-cf-orange shadow-brutalist-cyan p-0 overflow-hidden"
+        className="relative z-10 w-full max-w-lg border-2 border-accent shadow-brutalist-cyan p-0 overflow-hidden"
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="px-6 py-4 bg-black border-b-2 border-cf-orange flex items-center justify-between">
-          <h2 className="text-lg font-bold text-cf-orange font-display tracking-widest uppercase text-glow-cyan">
+        <div className="px-6 py-4 bg-card border-b-2 border-accent flex items-center justify-between">
+          <h2 className="text-lg font-bold text-accent font-display tracking-widest uppercase text-glow-cyan">
             [BUILD_YOUR_OWN]
           </h2>
           <CyberButton
@@ -85,32 +85,32 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
         <div className="p-6 space-y-6 max-h-[70vh] overflow-y-auto">
           {/* GitHub Repo */}
           <div>
-            <p className="text-cf-light-gray font-mono text-xs uppercase tracking-wider mb-3">
+            <p className="text-muted font-mono text-xs uppercase tracking-wider mb-3">
               {">"} SOURCE_CODE
             </p>
             <a
               href={GITHUB_REPO}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-3 p-4 bg-black border-2 border-cf-mid-gray hover:border-cf-orange hover:shadow-brutalist-cyan transition-all group"
+              className="flex items-center gap-3 p-4 bg-card border-2 border-muted hover:border-[var(--cf-orange)] hover:shadow-brutalist-cyan transition-all group"
             >
-              <GitHubIcon className="w-6 h-6 text-cf-light-gray group-hover:text-cf-orange flex-shrink-0" />
+              <GitHubIcon className="w-6 h-6 text-muted group-hover:text-[var(--cf-orange)] flex-shrink-0" />
               <div>
-                <div className="text-white font-mono text-sm group-hover:text-cf-orange">
+                <div className="text-primary font-mono text-sm group-hover:text-[var(--cf-orange)]">
                   harshil1712/ai-game-jam
                 </div>
-                <div className="text-cf-mid-gray font-mono text-xs mt-0.5">
+                <div className="text-dim-color font-mono text-xs mt-0.5">
                   github.com
                 </div>
               </div>
-              <ExternalLinkIcon className="w-4 h-4 text-cf-mid-gray group-hover:text-cf-orange ml-auto flex-shrink-0" />
+              <ExternalLinkIcon className="w-4 h-4 text-dim-color group-hover:text-[var(--cf-orange)] ml-auto flex-shrink-0" />
             </a>
           </div>
 
           {/* Resource sections */}
           {RESOURCES.map((section) => (
             <div key={section.category}>
-              <p className="text-cf-light-gray font-mono text-xs uppercase tracking-wider mb-3">
+              <p className="text-muted font-mono text-xs uppercase tracking-wider mb-3">
                 {">"} {section.category}
               </p>
               <div className="space-y-2">
@@ -120,17 +120,17 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
                     href={item.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between p-3 bg-black border border-cf-mid-gray hover:border-cf-orange hover:shadow-brutalist-cyan transition-all group"
+                    className="flex items-center justify-between p-3 bg-card border border-muted hover:border-[var(--cf-orange)] hover:shadow-brutalist-cyan transition-all group"
                   >
                     <div>
-                      <div className="text-white font-mono text-sm group-hover:text-cf-orange">
+                      <div className="text-primary font-mono text-sm group-hover:text-[var(--cf-orange)]">
                         {item.label}
                       </div>
-                      <div className="text-cf-mid-gray font-mono text-xs mt-0.5">
+                      <div className="text-dim-color font-mono text-xs mt-0.5">
                         {item.description}
                       </div>
                     </div>
-                    <ExternalLinkIcon className="w-3.5 h-3.5 text-cf-mid-gray group-hover:text-cf-orange ml-3 flex-shrink-0" />
+                    <ExternalLinkIcon className="w-3.5 h-3.5 text-dim-color group-hover:text-[var(--cf-orange)] ml-3 flex-shrink-0" />
                   </a>
                 ))}
               </div>
@@ -139,8 +139,8 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-3 bg-black border-t border-cf-mid-gray">
-          <p className="text-cf-mid-gray font-mono text-xs text-center uppercase tracking-wider">
+        <div className="px-6 py-3 bg-card border-t border-muted">
+          <p className="text-dim-color font-mono text-xs text-center uppercase tracking-wider">
             Built with Cloudflare Workers · MIT License
           </p>
         </div>
@@ -182,6 +182,6 @@ export function useHelpModal() {
   return {
     isOpen,
     open: () => setIsOpen(true),
-    close: () => setIsOpen(false),
+    close: () => setIsOpen(false)
   };
 }

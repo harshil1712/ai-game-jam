@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useCallback } from "react";
 import { QRCodeSVG } from "qrcode.react";
+import { SunIcon, MoonIcon } from "@phosphor-icons/react";
 
 const GITHUB_REPO = "https://github.com/harshil1712/ai-game-jam";
 
@@ -18,6 +19,7 @@ import { fetchDashboard, fetchStats } from "../lib/api";
 import { usePolling } from "../hooks/usePolling";
 import { AppHeader } from "../components/AppHeader";
 import { CyberSurface } from "../components/CyberSurface";
+import { CyberButton } from "../components/CyberButton";
 
 export const Route = createFileRoute("/dashboard")({
   component: DashboardPage,
@@ -34,6 +36,23 @@ function DashboardPage() {
     recent_games: 0,
   });
 
+  const [theme, setTheme] = useState<"dark" | "light">(() => {
+    if (typeof window !== "undefined") {
+      return (localStorage.getItem("theme") as "dark" | "light") || "dark";
+    }
+    return "dark";
+  });
+
+  const toggleTheme = useCallback(() => {
+    setTheme((prev) => {
+      const next = prev === "dark" ? "light" : "dark";
+      localStorage.setItem("theme", next);
+      document.documentElement.setAttribute("data-mode", next);
+      document.documentElement.style.colorScheme = next;
+      return next;
+    });
+  }, []);
+
   const refresh = useCallback(async () => {
     const [galleryData, statsData] = await Promise.all([
       fetchDashboard(10),
@@ -48,41 +67,41 @@ function DashboardPage() {
   const boothUrl = typeof window !== "undefined" ? window.location.origin : "";
 
   return (
-    <div className="h-screen bg-bg-deep bg-grid overflow-hidden flex flex-col">
+    <div className="min-h-screen bg-base bg-grid flex flex-col">
       {/* Header */}
       <AppHeader />
 
       {/* Main Content */}
-      <main className="flex-1 p-8 overflow-hidden">
-        <div className="max-w-7xl mx-auto h-full grid grid-cols-12 gap-8">
+      <main className="flex-1 p-8">
+        <div className="max-w-7xl mx-auto grid grid-cols-12 gap-8">
           {/* Leaderboard */}
-          <div className="col-span-12 lg:col-span-5 min-h-0">
-            <CyberSurface className="h-full p-6 shadow-brutalist-cyan border-2 flex flex-col">
-              <h2 className="text-2xl font-bold text-white mb-6 font-display tracking-widest uppercase text-glow-cyan shrink-0">
+          <div className="col-span-12 lg:col-span-5">
+            <CyberSurface className="p-6 shadow-brutalist-cyan border-2 flex flex-col">
+              <h2 className="text-2xl font-bold text-primary mb-6 font-display tracking-widest uppercase text-glow-cyan shrink-0">
                 [LEADERBOARD]
               </h2>
-              <div className="space-y-4 overflow-y-auto flex-1 min-h-0 pr-1">
+              <div className="space-y-4 pr-1 h-screen">
                 {games.slice(0, 5).map((game, index) => (
                   <div
                     key={game.id}
-                    className="flex items-center gap-4 p-4 bg-black border-2 border-cf-mid-gray"
+                    className="flex items-center gap-4 p-4 bg-card border-2 border-muted"
                   >
-                    <div className="text-3xl font-bold text-cf-orange w-8 font-display">
+                    <div className="text-3xl font-bold text-[var(--cf-orange)] w-8 font-display">
                       {index + 1}
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-xl font-semibold text-white font-display tracking-wide uppercase">
+                      <h3 className="text-xl font-semibold text-primary font-display tracking-wide uppercase">
                         {game.title}
                       </h3>
-                      <p className="text-cf-light-gray font-mono text-xs uppercase tracking-wider">
+                      <p className="text-[var(--cf-light-gray)] font-mono text-xs uppercase tracking-wider">
                         {">"} {game.creator_name}
                       </p>
                     </div>
                     <div className="text-right">
-                      <div className="text-2xl font-bold text-cf-orange-light font-mono">
+                      <div className="text-2xl font-bold text-[var(--cf-orange-light)] font-mono">
                         {game.vote_count}
                       </div>
-                      <div className="text-[10px] text-cf-light-gray font-mono uppercase">
+                      <div className="text-[10px] text-[var(--cf-light-gray)] font-mono uppercase">
                         VOTES
                       </div>
                     </div>
@@ -90,11 +109,11 @@ function DashboardPage() {
                 ))}
 
                 {games.length === 0 && (
-                  <div className="text-center py-12 border-2 border-cf-mid-gray">
-                    <p className="text-cf-light-gray text-lg font-mono uppercase">
+                  <div className="text-center py-12 border-2 border-muted">
+                    <p className="text-[var(--cf-light-gray)] text-lg font-mono uppercase">
                       [NO ENTRIES]
                     </p>
-                    <p className="text-cf-mid-gray text-sm font-mono mt-2">
+                    <p className="text-[var(--cf-mid-gray)] text-sm font-mono mt-2">
                       Scan the QR code to create a game
                     </p>
                   </div>
@@ -106,47 +125,48 @@ function DashboardPage() {
           {/* Stats & QR Code */}
           <div className="col-span-12 lg:col-span-7 flex flex-col gap-8">
             {/* Stats */}
-            <CyberSurface className="p-6 shadow-brutalist-magenta border-2">
-              <h2 className="text-2xl font-bold text-white mb-6 font-display tracking-widest uppercase text-glow-cyan">
+            {/* <CyberSurface className="p-6 shadow-brutalist-magenta border-2">
+              <h2 className="text-2xl font-bold text-primary mb-6 font-display tracking-widest uppercase text-glow-cyan">
                 [SYSTEM_STATUS]
               </h2>
               <div className="grid grid-cols-2 gap-6">
-                <div className="text-center p-6 bg-black border-2 border-cf-mid-gray">
-                  <div className="text-5xl font-bold text-cf-orange mb-2 font-display">
+                <div className="text-center p-6 bg-card border-2 border-muted">
+                  <div className="text-5xl font-bold text-[var(--cf-orange)] mb-2 font-display">
                     {stats.total_games}
                   </div>
-                  <div className="text-cf-light-gray font-mono text-xs uppercase tracking-wider">
+                  <div className="text-[var(--cf-light-gray)] font-mono text-xs uppercase tracking-wider">
                     Games Created
                   </div>
                 </div>
-                <div className="text-center p-6 bg-black border-2 border-cf-mid-gray">
-                  <div className="text-5xl font-bold text-cf-orange-light mb-2 font-display">
+                <div className="text-center p-6 bg-card border-2 border-muted">
+                  <div className="text-5xl font-bold text-[var(--cf-orange-light)] mb-2 font-display">
                     {stats.total_votes}
                   </div>
-                  <div className="text-cf-light-gray font-mono text-xs uppercase tracking-wider">
+                  <div className="text-[var(--cf-light-gray)] font-mono text-xs uppercase tracking-wider">
                     Total Votes
                   </div>
                 </div>
-                {/* <div className="text-center p-6 bg-black border-2 border-cf-mid-gray">
-                  <div className="text-5xl font-bold text-white mb-2 font-display">
-                    {stats.total_users}
-                  </div>
-                  <div className="text-cf-light-gray font-mono text-xs uppercase tracking-wider">
-                    Builders
-                  </div>
-                </div> */}
               </div>
-            </CyberSurface>
+            </CyberSurface> */}
 
             {/* QR Code */}
             <CyberSurface className="p-6 flex flex-col items-center justify-center shadow-brutalist-green border-2">
-              <div className="bg-white p-4 border-2 border-cf-mid-gray mb-4">
-                <QRCodeSVG value={boothUrl} size={180} />
+              <div className="bg-white p-4 border-2 border-muted mb-4">
+                <QRCodeSVG
+                  value={boothUrl}
+                  size={180}
+                  imageSettings={{
+                    src: "/qr-logo.svg",
+                    height: 32,
+                    width: 52,
+                    excavate: true,
+                  }}
+                />
               </div>
-              <h3 className="text-2xl font-bold text-white mb-2 font-display tracking-widest uppercase text-glow-cyan">
+              <h3 className="text-2xl font-bold text-primary mb-2 font-display tracking-widest uppercase text-glow-cyan">
                 SCAN_TO_BUILD
               </h3>
-              <p className="text-cf-light-gray text-center font-mono text-sm uppercase tracking-wider">
+              <p className="text-(--cf-light-gray) text-center font-mono text-sm uppercase tracking-wider">
                 Point your camera at the QR code
                 <br />
                 to start building your game
@@ -158,7 +178,7 @@ function DashboardPage() {
               <div className="flex items-start gap-6">
                 {/* Resources */}
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-lg font-bold text-white mb-3 font-display tracking-widest uppercase text-glow-cyan">
+                  <h3 className="text-lg font-bold text-primary mb-3 font-display tracking-widest uppercase text-glow-cyan">
                     BUILD_YOUR_OWN
                   </h3>
                   <div className="space-y-1.5">
@@ -168,9 +188,9 @@ function DashboardPage() {
                         href={r.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 text-cf-light-gray hover:text-cf-orange font-mono text-xs uppercase tracking-wider transition-colors group"
+                        className="flex items-center gap-2 text-[var(--cf-light-gray)] hover:text-[var(--cf-orange)] font-mono text-xs uppercase tracking-wider transition-colors group"
                       >
-                        <span className="text-cf-orange group-hover:text-cf-orange-light">
+                        <span className="text-[var(--cf-orange)] group-hover:text-[var(--cf-orange-light)]">
                           {">"}
                         </span>
                         {r.label}
@@ -180,9 +200,9 @@ function DashboardPage() {
                       href={GITHUB_REPO}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-cf-light-gray hover:text-cf-orange font-mono text-xs uppercase tracking-wider transition-colors group mt-2"
+                      className="flex items-center gap-2 text-[var(--cf-light-gray)] hover:text-[var(--cf-orange)] font-mono text-xs uppercase tracking-wider transition-colors group mt-2"
                     >
-                      <span className="text-cf-orange group-hover:text-cf-orange-light">
+                      <span className="text-[var(--cf-orange)] group-hover:text-[var(--cf-orange-light)]">
                         {">"}
                       </span>
                       github.com/harshil1712/ai-game-jam
