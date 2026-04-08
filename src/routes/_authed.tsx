@@ -1,5 +1,4 @@
 import { createFileRoute, redirect, Outlet } from "@tanstack/react-router";
-import { AppHeader } from "../components/AppHeader";
 
 export const Route = createFileRoute("/_authed")({
   beforeLoad: async ({ context }) => {
@@ -7,14 +6,5 @@ export const Route = createFileRoute("/_authed")({
       throw redirect({ to: "/" });
     }
   },
-  component: AuthedLayout
+  component: () => <Outlet />
 });
-
-function AuthedLayout() {
-  return (
-    <div className="flex flex-col h-screen bg-bg-deep">
-      <AppHeader />
-      <Outlet />
-    </div>
-  );
-}
