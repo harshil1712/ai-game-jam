@@ -1,10 +1,29 @@
+import { useState, useCallback } from "react";
 import { Link } from "@tanstack/react-router";
+import { SunIcon, MoonIcon } from "@phosphor-icons/react";
 import { CyberButton } from "./CyberButton";
 import { CyberLinkButton } from "./CyberButton";
 import { HelpModal, useHelpModal } from "./HelpModal";
 
 export function AppHeader() {
   const help = useHelpModal();
+
+  const [theme, setTheme] = useState<"dark" | "light">(() => {
+    if (typeof window !== "undefined") {
+      return (localStorage.getItem("theme") as "dark" | "light") || "dark";
+    }
+    return "dark";
+  });
+
+  const toggleTheme = useCallback(() => {
+    setTheme((prev) => {
+      const next = prev === "dark" ? "light" : "dark";
+      localStorage.setItem("theme", next);
+      document.documentElement.setAttribute("data-mode", next);
+      document.documentElement.style.colorScheme = next;
+      return next;
+    });
+  }, []);
 
   return (
     <>
@@ -32,6 +51,24 @@ export function AppHeader() {
             >
               LOGOUT
             </CyberLinkButton>
+            <CyberButton
+              cyber="ghost"
+              shape="square"
+              aria-label="Toggle theme"
+              onClick={toggleTheme}
+              className="w-6 h-6"
+              title={
+                theme === "dark"
+                  ? "Switch to light mode"
+                  : "Switch to dark mode"
+              }
+            >
+              {theme === "dark" ? (
+                <SunIcon size={16} />
+              ) : (
+                <MoonIcon size={16} />
+              )}
+            </CyberButton>
             <CyberButton
               cyber="ghost"
               shape="square"

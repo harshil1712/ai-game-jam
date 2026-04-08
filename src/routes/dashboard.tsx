@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useCallback } from "react";
 import { QRCodeSVG } from "qrcode.react";
-import { SunIcon, MoonIcon } from "@phosphor-icons/react";
 
 const GITHUB_REPO = "https://github.com/harshil1712/ai-game-jam";
 
@@ -36,22 +35,6 @@ function DashboardPage() {
     recent_games: 0,
   });
 
-  const [theme, setTheme] = useState<"dark" | "light">(() => {
-    if (typeof window !== "undefined") {
-      return (localStorage.getItem("theme") as "dark" | "light") || "dark";
-    }
-    return "dark";
-  });
-
-  const toggleTheme = useCallback(() => {
-    setTheme((prev) => {
-      const next = prev === "dark" ? "light" : "dark";
-      localStorage.setItem("theme", next);
-      document.documentElement.setAttribute("data-mode", next);
-      document.documentElement.style.colorScheme = next;
-      return next;
-    });
-  }, []);
 
   const refresh = useCallback(async () => {
     const [galleryData, statsData] = await Promise.all([
