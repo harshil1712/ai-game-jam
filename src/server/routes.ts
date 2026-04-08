@@ -67,12 +67,16 @@ export async function handleLogout(
   request: Request,
   _env: Env
 ): Promise<Response> {
-  const err = assertMethod(request, "POST");
+  const err = assertMethod(request, "GET");
   if (err) return err;
 
-  return jsonResponse({ ok: true }, 200, {
-    "Set-Cookie":
-      "session=; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=0"
+  return new Response(null, {
+    status: 302,
+    headers: {
+      Location: "/",
+      "Set-Cookie":
+        "session=; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=0"
+    }
   });
 }
 

@@ -1,17 +1,10 @@
-import { Link, useRouter } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { CyberButton } from "./CyberButton";
+import { CyberLinkButton } from "./CyberButton";
 import { HelpModal, useHelpModal } from "./HelpModal";
-import { logout } from "../lib/api";
 
 export function AppHeader() {
   const help = useHelpModal();
-  const router = useRouter();
-
-  const handleLogout = async () => {
-    await logout();
-    await router.invalidate();
-    await router.navigate({ to: "/" });
-  };
 
   return (
     <>
@@ -30,15 +23,15 @@ export function AppHeader() {
                 GALLERY
               </CyberButton>
             </Link>
-            <CyberButton
+            <CyberLinkButton
               cyber="ghost"
               variant="secondary"
               size="sm"
-              onClick={handleLogout}
+              href="/api/logout"
               title="Log out"
             >
               LOGOUT
-            </CyberButton>
+            </CyberLinkButton>
             <CyberButton
               cyber="ghost"
               shape="square"

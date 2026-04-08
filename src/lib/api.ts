@@ -41,10 +41,6 @@ export async function login(name: string, email: string): Promise<PublicUser> {
   return res.json();
 }
 
-export async function logout(): Promise<void> {
-  await fetch("/api/logout", { method: "POST" });
-}
-
 export async function vote(
   gameId: string
 ): Promise<{ vote_count: number; voted: boolean }> {

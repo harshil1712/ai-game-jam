@@ -1,4 +1,5 @@
-import { Button } from "@cloudflare/kumo";
+import { Button, LinkButton } from "@cloudflare/kumo";
+import type { LinkButtonProps } from "@cloudflare/kumo";
 import * as React from "react";
 
 export type CyberVariant = "primary" | "secondary" | "danger" | "ghost";
@@ -58,4 +59,19 @@ export function CyberButton({
 
   // Pass through all props including shape and aria-label if they exist
   return <Button variant={variant} className={combinedClassName} {...props} />;
+}
+
+export type CyberLinkButtonProps = LinkButtonProps & {
+  cyber?: CyberVariant;
+};
+
+export function CyberLinkButton({
+  cyber = "primary",
+  className = "",
+  variant = "secondary",
+  ...props
+}: CyberLinkButtonProps) {
+  const combinedClassName = `${cyberClasses[cyber]} ${className}`;
+
+  return <LinkButton variant={variant} className={combinedClassName} {...props} />;
 }
