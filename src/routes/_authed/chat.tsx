@@ -19,7 +19,8 @@ import { ToolPartView } from "../../components/ToolPartView";
 import { CyberButton } from "../../components/CyberButton";
 
 export const Route = createFileRoute("/_authed/chat")({
-  component: ChatPage
+  component: ChatPage,
+  loader: () => {}
 });
 
 function ChatPage() {
