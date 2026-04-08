@@ -16,7 +16,6 @@ import {
 import { isToolUIPart, getToolName } from "ai";
 import type { ChatAgent } from "../../server";
 import { ToolPartView } from "../../components/ToolPartView";
-import { AppHeader } from "../../components/AppHeader";
 import { CyberButton } from "../../components/CyberButton";
 
 export const Route = createFileRoute("/_authed/chat")({
@@ -93,9 +92,7 @@ function ChatPage() {
   ];
 
   return (
-    <div className="flex flex-col h-screen bg-bg-deep">
-      <AppHeader />
-
+    <div className="flex flex-col flex-1 bg-bg-deep">
       <div className="flex-1 flex flex-col overflow-hidden max-w-3xl mx-auto w-full">
         {messages.length > 0 && (
           <div className="flex justify-end px-5 pt-4">

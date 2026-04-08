@@ -3,7 +3,6 @@ import { useState, useCallback } from "react";
 import type { GalleryGame, GalleryData } from "../../types";
 import { fetchGallery, vote } from "../../lib/api";
 import { usePolling } from "../../hooks/usePolling";
-import { AppHeader } from "../../components/AppHeader";
 import { GameCard } from "../../components/GameCard";
 import { CyberButton } from "../../components/CyberButton";
 
@@ -39,9 +38,7 @@ function GalleryPage() {
   };
 
   return (
-    <div className="min-h-screen bg-bg-deep">
-      <AppHeader />
-
+    <div className="flex-1 overflow-y-auto">
       <main className="max-w-6xl mx-auto px-5 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {games.map((game) => (
