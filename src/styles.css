@@ -16,25 +16,61 @@
   --color-bg-charcoal: #111111;
 }
 
+/* ─── Shared (both themes) ─────────────────────────────────────── */
 :root {
-  /* Cloudflare Console Color Palette */
-  --bg-deep-black: #050505;
-  --bg-charcoal: #111111;
-  --cf-orange: #f48120;
-  --cf-orange-light: #ffb020;
-  --cf-orange-dark: #d9650d;
-  --cf-blue: #0055ff;
-  --cf-dark-gray: #1d1f20;
-  --cf-mid-gray: #3c3e40;
-  --cf-light-gray: #8e8e8e;
-  --text-white: #ffffff;
-  --text-dim: #8e8e8e;
-  --border-color: #f48120;
-  --shadow-offset: 4px;
-
-  /* Typography */
   --font-display: "Chakra Petch", sans-serif;
   --font-mono: "Space Mono", monospace;
+  --shadow-offset: 4px;
+}
+
+/* ─── Dark theme (default) ─────────────────────────────────────── */
+[data-mode="dark"] {
+  --bg-deep-black: #050505;
+  --bg-charcoal:   #111111;
+  --bg-card:       #000000;
+
+  --cf-orange:       #f48120;
+  --cf-orange-light: #ffb020;
+  --cf-orange-dark:  #d9650d;
+  --cf-blue:         #0055ff;
+  --cf-dark-gray:    #1d1f20;
+  --cf-mid-gray:     #3c3e40;
+  --cf-light-gray:   #8e8e8e;
+
+  --text-white: #ffffff;
+  --text-dim:   #8e8e8e;
+  --border-color: #f48120;
+
+  --grid-line: rgba(244, 129, 32, 0.03);
+  --glow-primary: #f48120;
+  --glow-secondary: #ffb020;
+  --glow-accent: #0055ff;
+  --crt-opacity: 1;
+}
+
+/* ─── Light cyberpunk theme ────────────────────────────────────── */
+[data-mode="light"] {
+  --bg-deep-black: #ede9e0;
+  --bg-charcoal:   #f7f5f0;
+  --bg-card:       #ffffff;
+
+  --cf-orange:       #d4690a;
+  --cf-orange-light: #e87f1a;
+  --cf-orange-dark:  #b8520a;
+  --cf-blue:         #003db3;
+  --cf-dark-gray:    #b5ad9e;
+  --cf-mid-gray:     #c8c0b4;
+  --cf-light-gray:   #6b6560;
+
+  --text-white: #1a1714;
+  --text-dim:   #6b6560;
+  --border-color: #d4690a;
+
+  --grid-line: rgba(180, 140, 80, 0.07);
+  --glow-primary: #d4690a;
+  --glow-secondary: #e87f1a;
+  --glow-accent: #003db3;
+  --crt-opacity: 0;
 }
 
 html,
@@ -48,7 +84,26 @@ body,
   color: var(--text-white);
 }
 
-/* Typography Utilities */
+/* ─── Semantic theme-aware utilities ──────────────────────────── */
+.bg-base    { background-color: var(--bg-deep-black); }
+.bg-surface { background-color: var(--bg-charcoal); }
+.bg-card    { background-color: var(--bg-card); }
+.bg-accent  { background-color: var(--cf-orange); }
+
+.text-primary      { color: var(--text-white); }
+.text-secondary    { color: var(--text-dim); }
+.text-accent       { color: var(--cf-orange); }
+.text-accent-light { color: var(--cf-orange-light); }
+.text-accent-dark  { color: var(--cf-orange-dark); }
+.text-muted        { color: var(--cf-light-gray); }
+.text-dim-color    { color: var(--cf-mid-gray); }
+
+.border-accent       { border-color: var(--border-color); }
+.border-accent-light { border-color: var(--cf-orange-light); }
+.border-muted        { border-color: var(--cf-mid-gray); }
+.border-dim          { border-color: var(--cf-dark-gray); }
+
+/* ─── Typography Utilities ─────────────────────────────────────── */
 .font-display {
   font-family: var(--font-display);
 }
@@ -57,7 +112,7 @@ body,
   font-family: var(--font-mono);
 }
 
-/* CRT Scanline Overlay */
+/* ─── CRT Scanline Overlay ─────────────────────────────────────── */
 .crt-overlay {
   position: relative;
 }
@@ -78,55 +133,56 @@ body,
     transparent 2px
   );
   z-index: 9999;
+  opacity: var(--crt-opacity, 1);
+  transition: opacity 0.3s ease;
 }
 
-/* Glowing Text Effects */
+/* ─── Glowing Text Effects ─────────────────────────────────────── */
 .text-glow-cyan {
   text-shadow:
-    0 0 10px var(--cf-orange),
-    0 0 20px var(--cf-orange);
+    0 0 10px var(--glow-primary),
+    0 0 20px var(--glow-primary);
 }
 
 .text-glow-green {
   text-shadow:
-    0 0 10px var(--cf-orange-light),
-    0 0 20px var(--cf-orange-light);
+    0 0 10px var(--glow-secondary),
+    0 0 20px var(--glow-secondary);
 }
 
 .text-glow-magenta {
   text-shadow:
-    0 0 10px var(--cf-blue),
-    0 0 20px var(--cf-blue);
+    0 0 10px var(--glow-accent),
+    0 0 20px var(--glow-accent);
 }
 
-/* Box Glow Effects */
+/* ─── Box Glow Effects ─────────────────────────────────────────── */
 .box-glow-cyan {
   box-shadow:
-    0 0 10px var(--cf-orange),
+    0 0 10px var(--glow-primary),
     0 0 20px rgba(244, 129, 32, 0.3);
 }
 
 .box-glow-green {
   box-shadow:
-    0 0 10px var(--cf-orange-light),
+    0 0 10px var(--glow-secondary),
     0 0 20px rgba(255, 176, 32, 0.3);
 }
 
-/* Brutalist Offset Shadow */
+/* ─── Brutalist Offset Shadow ──────────────────────────────────── */
 .shadow-brutalist-cyan {
-  box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--cf-orange);
+  box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--glow-primary);
 }
 
 .shadow-brutalist-magenta {
-  box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--cf-blue);
+  box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--glow-accent);
 }
 
 .shadow-brutalist-green {
-  box-shadow: var(--shadow-offset) var(--shadow-offset) 0px
-    var(--cf-orange-light);
+  box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--glow-secondary);
 }
 
-/* Blinking Cursor */
+/* ─── Blinking Cursor ──────────────────────────────────────────── */
 @keyframes blink {
   0%,
   50% {
@@ -143,7 +199,7 @@ body,
   animation: blink 1s infinite;
 }
 
-/* Chamfered Corners using clip-path */
+/* ─── Chamfered Corners ────────────────────────────────────────── */
 .chamfer-br {
   clip-path: polygon(
     0 0,
@@ -158,15 +214,15 @@ body,
   clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
 }
 
-/* Grid Pattern Background */
+/* ─── Grid Pattern Background ──────────────────────────────────── */
 .bg-grid {
   background-image:
-    linear-gradient(rgba(244, 129, 32, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(244, 129, 32, 0.03) 1px, transparent 1px);
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
   background-size: 50px 50px;
 }
 
-/* Hardware LED Indicator */
+/* ─── Hardware LED Indicator ───────────────────────────────────── */
 .led-indicator {
   width: 8px;
   height: 8px;

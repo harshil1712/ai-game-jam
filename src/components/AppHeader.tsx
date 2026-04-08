@@ -12,10 +12,11 @@ export function AppHeader({ title, actions }: AppHeaderProps) {
 
   return (
     <>
-      <header className="px-5 py-3 bg-bg-charcoal border-b-2 border-cf-orange">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
+      <header className="px-5 py-3 bg-surface border-b-2 border-accent">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-bold text-white font-display text-glow-cyan tracking-widest uppercase">
+            <img src="/cf-logo.svg" alt="Cloudflare" className="h-6 sm:h-8" />
+            <h1 className="text-lg sm:text-2xl font-bold text-primary font-display text-glow-cyan tracking-normal sm:tracking-widest uppercase">
               {title}
             </h1>
           </div>
@@ -26,7 +27,7 @@ export function AppHeader({ title, actions }: AppHeaderProps) {
               shape="square"
               aria-label="Help & resources"
               onClick={help.open}
-              className="w-9 h-9 text-sm font-bold"
+              className="w-6 h-6 text-xs font-bold"
               title="Help & Resources"
             >
               ?

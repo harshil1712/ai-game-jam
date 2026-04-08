@@ -10,7 +10,7 @@ import {
   StopIcon,
   TrashIcon,
   BrainIcon,
-  CaretDownIcon
+  CaretDownIcon,
 } from "@phosphor-icons/react";
 
 import { isToolUIPart, getToolName } from "ai";
@@ -20,7 +20,7 @@ import { AppHeader } from "../../components/AppHeader";
 import { CyberButton } from "../../components/CyberButton";
 
 export const Route = createFileRoute("/_authed/chat")({
-  component: ChatPage
+  component: ChatPage,
 });
 
 function ChatPage() {
@@ -34,11 +34,11 @@ function ChatPage() {
     agent: "ChatAgent",
     name: `user_${user?.id}`,
     onOpen: () => setConnected(true),
-    onClose: () => setConnected(false)
+    onClose: () => setConnected(false),
   });
 
   const { messages, sendMessage, clearHistory, stop, status } = useAgentChat({
-    agent
+    agent,
   });
 
   const isStreaming = status === "streaming" || status === "submitted";
@@ -76,7 +76,7 @@ function ChatPage() {
 
     sendMessage({
       role: "user",
-      parts: [{ type: "text", text }]
+      parts: [{ type: "text", text }],
     });
 
     if (textareaRef.current) {
@@ -89,24 +89,24 @@ function ChatPage() {
     "Make a quiz about Cloudflare",
     "Create a drawing canvas",
     "Build a memory match game",
-    "Make a bouncing balls simulation"
+    "Make a bouncing balls simulation",
   ];
 
   return (
-    <div className="flex flex-col h-screen bg-bg-deep">
+    <div className="flex flex-col h-screen bg-base">
       <AppHeader
         title="AI GAME JAM"
         actions={
           <>
             <Link to="/gallery">
-              <CyberButton variant="secondary" size="sm">
+              <CyberButton variant="secondary" size="xs">
                 ARCHIVE
               </CyberButton>
             </Link>
             <CyberButton
               cyber="ghost"
               variant="secondary"
-              size="sm"
+              size="xs"
               icon={<TrashIcon size={14} />}
               onClick={clearHistory}
             >
@@ -120,15 +120,13 @@ function ChatPage() {
         <div className="flex-1 overflow-y-auto px-5 py-6">
           {messages.length === 0 && (
             <div className="text-center py-12">
-              <div className="inline-flex items-center justify-center w-20 h-20 border-2 border-cf-orange shadow-brutalist-cyan bg-bg-charcoal mb-6">
-                <span className="text-3xl text-cf-orange font-mono">
-                  {">"}_
-                </span>
+              <div className="inline-flex items-center justify-center w-20 h-20 border-2 border-accent shadow-brutalist-cyan bg-surface mb-6">
+                <span className="text-3xl text-accent font-mono">{">"}_</span>
               </div>
-              <h2 className="text-xl font-bold text-white mb-2 font-display tracking-wider uppercase text-glow-cyan">
+              <h2 className="text-xl font-bold text-primary mb-2 font-display tracking-wider uppercase text-glow-cyan">
                 INITIALIZE BUILD
               </h2>
-              <p className="text-cf-light-gray mb-6 font-mono text-sm uppercase tracking-wide">
+              <p className="text-muted mb-6 font-mono text-sm uppercase tracking-wide">
                 Enter command sequence for game generation
               </p>
               <div className="flex flex-wrap justify-center gap-3 max-w-lg mx-auto">
@@ -140,7 +138,7 @@ function ChatPage() {
                     onClick={() =>
                       sendMessage({
                         role: "user",
-                        parts: [{ type: "text", text: prompt }]
+                        parts: [{ type: "text", text: prompt }],
                       })
                     }
                     className="tracking-wide"
@@ -174,7 +172,7 @@ function ChatPage() {
                       );
                     }
 
-                    // Reasoning parts
+                    // Reasoning parts — purple is intentionally unchanged (visible on both themes)
                     if (part.type === "reasoning") {
                       const reasoning = part as {
                         type: "reasoning";
@@ -215,7 +213,7 @@ function ChatPage() {
                                 className="ml-auto text-purple-500 transition-transform group-open:rotate-180"
                               />
                             </summary>
-                            <pre className="mt-0 px-3 py-2 border-l-2 border-purple-500/50 bg-bg-charcoal text-sm text-slate-400 whitespace-pre-wrap overflow-auto max-h-64">
+                            <pre className="mt-0 px-3 py-2 border-l-2 border-purple-500/50 bg-surface text-sm text-slate-400 whitespace-pre-wrap overflow-auto max-h-64">
                               {reasoning.text}
                             </pre>
                           </details>
@@ -231,8 +229,8 @@ function ChatPage() {
                       if (isUser) {
                         return (
                           <div key={`text-${i}`} className="flex justify-start">
-                            <div className="max-w-[80%] px-0 py-1 text-white font-mono leading-relaxed">
-                              <span className="text-cf-orange mr-2">{">"}</span>
+                            <div className="max-w-[80%] px-0 py-1 text-primary font-mono leading-relaxed">
+                              <span className="text-accent mr-2">{">"}</span>
                               {text}
                             </div>
                           </div>
@@ -241,7 +239,7 @@ function ChatPage() {
 
                       return (
                         <div key={`text-${i}`} className="flex justify-start">
-                          <div className="max-w-[80%] border-l-2 border-cf-orange bg-bg-charcoal text-slate-200 leading-relaxed">
+                          <div className="max-w-[80%] border-l-2 border-accent bg-surface text-secondary leading-relaxed">
                             <Streamdown
                               className="sd-theme p-3"
                               plugins={{ code }}
@@ -266,9 +264,9 @@ function ChatPage() {
           </div>
         </div>
 
-        <div className="border-t border-cf-dark-gray bg-bg-charcoal p-4">
-          <div className="flex items-end gap-3 border-t-2 border-cf-mid-gray bg-black p-4">
-            <span className="text-cf-orange font-mono text-lg">{">"}</span>
+        <div className="border-t border-dim bg-surface p-4">
+          <div className="flex items-end gap-3 border-t-2 border-muted bg-card p-4">
+            <span className="text-accent font-mono text-lg">{">"}</span>
             <InputArea
               ref={textareaRef}
               value={input}
@@ -287,7 +285,7 @@ function ChatPage() {
               placeholder="ENTER_COMMAND_SEQUENCE..."
               disabled={!connected || isStreaming}
               rows={1}
-              className="flex-1 ring-0! focus:ring-0! shadow-none! bg-transparent! outline-none! resize-none max-h-40 text-white font-mono placeholder:text-cf-mid-gray uppercase"
+              className="flex-1 ring-0! focus:ring-0! shadow-none! bg-transparent! outline-none! resize-none max-h-40 text-primary font-mono placeholder:text-[var(--cf-mid-gray)] uppercase"
             />
             {isStreaming ? (
               <CyberButton
@@ -302,12 +300,11 @@ function ChatPage() {
             ) : (
               <CyberButton
                 type="button"
-                variant="primary"
                 shape="square"
                 disabled={!input.trim() || !connected}
                 icon={<PaperPlaneRightIcon size={18} />}
                 onClick={send}
-                className="border-cf-orange text-cf-orange hover:bg-cf-orange hover:text-black disabled:border-cf-mid-gray disabled:text-cf-mid-gray"
+                className="border-accent text-accent hover:bg-[var(--cf-orange)] hover:text-[var(--bg-card)] disabled:border-muted disabled:text-[var(--cf-mid-gray)]"
                 aria-label="Send message"
               />
             )}

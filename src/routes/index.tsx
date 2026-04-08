@@ -53,13 +53,13 @@ function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-bg-deep bg-grid flex items-center justify-center p-4">
+    <div className="min-h-screen bg-base bg-grid flex items-center justify-center p-4">
       <CyberSurface glow className="w-full max-w-md p-8 border-2">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2 font-display text-glow-cyan tracking-wider">
+          <h1 className="text-3xl font-bold text-primary mb-2 font-display text-glow-cyan tracking-wider">
             AI GAME JAM
           </h1>
-          <p className="text-cf-light-gray font-mono text-sm uppercase tracking-widest">
+          <p className="text-muted font-mono text-sm uppercase tracking-widest">
             AI Engineer Europe 2026
           </p>
         </div>
@@ -68,7 +68,7 @@ function LoginPage() {
           <div>
             <label
               htmlFor="name"
-              className="block text-xs font-bold text-cf-orange mb-1 font-mono uppercase tracking-wider"
+              className="block text-xs font-bold text-accent mb-1 font-mono uppercase tracking-wider"
             >
               [NAME]
             </label>
@@ -79,14 +79,14 @@ function LoginPage() {
               onChange={(e) => setName(e.target.value)}
               placeholder="> ENTER_IDENTITY"
               disabled={loading}
-              className="w-full rounded-none border-2 border-cf-mid-gray focus:border-cf-orange bg-black text-white font-mono placeholder:text-cf-mid-gray"
+              className="w-full rounded-none border-2 border-muted focus:border-[var(--cf-orange)] bg-card text-primary font-mono placeholder:text-[var(--cf-mid-gray)]"
             />
           </div>
 
           <div>
             <label
               htmlFor="email"
-              className="block text-xs font-bold text-cf-orange mb-1 font-mono uppercase tracking-wider"
+              className="block text-xs font-bold text-accent mb-1 font-mono uppercase tracking-wider"
             >
               [EMAIL]
             </label>
@@ -97,17 +97,16 @@ function LoginPage() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="> ENTER_COMMS_ADDRESS"
               disabled={loading}
-              className="w-full rounded-none border-2 border-cf-mid-gray focus:border-cf-orange bg-black text-white font-mono placeholder:text-cf-mid-gray"
+              className="w-full rounded-none border-2 border-muted focus:border-[var(--cf-orange)] bg-card text-primary font-mono placeholder:text-[var(--cf-mid-gray)]"
             />
           </div>
 
           {error && (
-            <p className="text-cf-orange-dark text-sm font-mono">[!] {error}</p>
+            <p className="text-accent-dark text-sm font-mono">[!] {error}</p>
           )}
 
           <CyberButton
             type="submit"
-            variant="primary"
             className="w-full tracking-wider font-display font-bold transition-all"
             disabled={loading}
           >
@@ -115,7 +114,7 @@ function LoginPage() {
           </CyberButton>
         </form>
 
-        <p className="text-center text-xs text-cf-light-gray mt-6 font-mono uppercase">
+        <p className="text-center text-xs text-muted mt-6 font-mono uppercase">
           Your game will be live in seconds.
         </p>
       </CyberSurface>

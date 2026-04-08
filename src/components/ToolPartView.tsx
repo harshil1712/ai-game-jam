@@ -39,8 +39,8 @@ export function ToolPartView({
       <div className="flex justify-start">
         <CyberSurface className="max-w-[80%] px-4 py-2.5">
           <div className="flex items-center gap-2">
-            <GearIcon size={14} className="text-cf-orange animate-spin" />
-            <span className="text-sm text-cf-orange font-mono uppercase">
+            <GearIcon size={14} className="text-accent animate-spin" />
+            <span className="text-sm text-accent font-mono uppercase">
               {">"} {displayName}...
             </span>
           </div>
@@ -57,12 +57,12 @@ export function ToolPartView({
             {isGame ? (
               <RocketLaunchIcon
                 size={14}
-                className="text-cf-orange-dark animate-pulse"
+                className="text-accent-dark animate-pulse"
               />
             ) : (
-              <GearIcon size={14} className="text-cf-orange animate-spin" />
+              <GearIcon size={14} className="text-accent animate-spin" />
             )}
-            <span className="text-sm text-cf-orange font-mono uppercase">
+            <span className="text-sm text-accent font-mono uppercase">
               {isGame
                 ? "{'>'} DEPLOYING ARCHIVE..."
                 : `{'>'} EXECUTING ${displayName}...`}
@@ -84,23 +84,23 @@ export function ToolPartView({
             <div className="w-full">
               {/* Deployed badge row */}
               <div className="flex items-center gap-2 mb-3">
-                <CheckCircleIcon size={14} className="text-cf-orange-light" />
-                <span className="text-sm font-bold text-cf-orange-light font-mono uppercase">
+                <CheckCircleIcon size={14} className="text-accent-light" />
+                <span className="text-sm font-bold text-accent-light font-mono uppercase">
                   [ARCHIVE DEPLOYED]
                 </span>
                 <Badge
                   variant="secondary"
-                  className="rounded-none border border-cf-orange-light text-cf-orange-light bg-black font-mono text-[10px]"
+                  className="rounded-none border border-accent-light text-accent-light bg-card font-mono text-[10px]"
                 >
                   OK
                 </Badge>
               </div>
 
               {/* Preview block */}
-              <div className="border-2 border-cf-mid-gray bg-bg-charcoal">
+              <div className="border-2 border-muted bg-surface">
                 {/* Header bar */}
-                <div className="flex items-center justify-between px-3 py-2 border-b-2 border-cf-mid-gray">
-                  <h3 className="font-bold text-white font-display tracking-wider uppercase text-xs text-glow-cyan">
+                <div className="flex items-center justify-between px-3 py-2 border-b-2 border-muted">
+                  <h3 className="font-bold text-primary font-display tracking-wider uppercase text-xs text-glow-cyan">
                     PREVIEW_UNIT
                   </h3>
                   <div className="flex gap-2">
@@ -144,8 +144,8 @@ export function ToolPartView({
                 </div>
 
                 {/* Iframe container — responsive with CRT border */}
-                <div className="p-2 sm:p-3 bg-bg-charcoal">
-                  <div className="border-8 sm:border-[12px] border-cf-dark-gray shadow-[inset_0_0_20px_rgba(0,0,0,0.8)] bg-black overflow-hidden aspect-[4/3] w-full">
+                <div className="p-2 sm:p-3 bg-surface">
+                  <div className="border-8 sm:border-[12px] border-dim shadow-[inset_0_0_20px_rgba(0,0,0,0.8)] bg-card overflow-hidden aspect-[4/3] w-full">
                     {gameUrl ? (
                       <iframe
                         src={gameUrl}
@@ -154,7 +154,7 @@ export function ToolPartView({
                         title="Game Preview"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-cf-mid-gray font-mono text-xs uppercase">
+                      <div className="w-full h-full flex items-center justify-center text-dim-color font-mono text-xs uppercase">
                         No preview available
                       </div>
                     )}
@@ -162,14 +162,14 @@ export function ToolPartView({
                 </div>
 
                 {/* Status bar */}
-                <div className="px-3 py-2 border-t border-cf-dark-gray flex justify-between items-center">
-                  <span className="text-[10px] text-cf-light-gray font-mono uppercase">
+                <div className="px-3 py-2 border-t border-dim flex justify-between items-center">
+                  <span className="text-[10px] text-muted font-mono uppercase">
                     Status: RUNNING
                   </span>
                   <div className="flex gap-1">
-                    <div className="w-2 h-2 bg-cf-orange box-glow-green"></div>
-                    <div className="w-2 h-2 bg-cf-orange box-glow-green"></div>
-                    <div className="w-2 h-2 bg-cf-mid-gray"></div>
+                    <div className="w-2 h-2 bg-accent box-glow-green"></div>
+                    <div className="w-2 h-2 bg-accent box-glow-green"></div>
+                    <div className="w-2 h-2 bg-[var(--cf-mid-gray)]"></div>
                   </div>
                 </div>
               </div>
@@ -183,13 +183,13 @@ export function ToolPartView({
         <div className="flex justify-start">
           <CyberSurface className="max-w-[80%] px-4 py-2.5">
             <div className="flex items-center gap-2 flex-wrap">
-              <CheckCircleIcon size={14} className="text-cf-orange-light" />
-              <span className="text-sm font-bold text-cf-orange-light font-mono uppercase">
+              <CheckCircleIcon size={14} className="text-accent-light" />
+              <span className="text-sm font-bold text-accent-light font-mono uppercase">
                 [ARCHIVE DEPLOYED]
               </span>
               <Badge
                 variant="secondary"
-                className="rounded-none border border-cf-orange-light text-cf-orange-light bg-black font-mono text-[10px]"
+                className="rounded-none border border-accent-light text-accent-light bg-card font-mono text-[10px]"
               >
                 OK
               </Badge>
@@ -209,18 +209,18 @@ export function ToolPartView({
       );
     }
 
-    // Non-game tools - unchanged
+    // Non-game tools
     return (
       <div className="flex justify-start">
         <CyberSurface className="max-w-[80%] px-4 py-2.5">
           <div className="flex items-center gap-2">
-            <GearIcon size={14} className="text-cf-orange" />
-            <span className="text-sm font-bold text-cf-orange-light font-mono uppercase">
+            <GearIcon size={14} className="text-accent" />
+            <span className="text-sm font-bold text-accent-light font-mono uppercase">
               [{displayName}]
             </span>
             <Badge
               variant="secondary"
-              className="rounded-none border border-cf-orange-light text-cf-orange-light bg-black font-mono text-[10px]"
+              className="rounded-none border border-accent-light text-accent-light bg-card font-mono text-[10px]"
             >
               OK
             </Badge>
@@ -245,7 +245,7 @@ export function ToolPartView({
             </span>
             <Badge
               variant="secondary"
-              className="rounded-none border border-red-500 text-red-400 bg-black font-mono text-[10px]"
+              className="rounded-none border border-red-500 text-red-400 bg-card font-mono text-[10px]"
             >
               FAIL
             </Badge>

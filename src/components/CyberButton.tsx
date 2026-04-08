@@ -36,16 +36,16 @@ export type CyberButtonProps =
 const cyberClasses: Record<CyberVariant, string> = {
   // Orange accent — default interactive button
   primary:
-    "rounded-none border-2 border-cf-mid-gray bg-black text-cf-orange hover:bg-cf-orange hover:text-black hover:border-cf-orange font-mono uppercase text-xs",
+    "rounded-none border-2 border-muted bg-card text-[var(--cf-orange)] hover:bg-[var(--cf-orange)] hover:text-[var(--bg-card)] hover:border-[var(--cf-orange)] font-mono uppercase text-xs",
   // Gray accent — secondary/muted button
   secondary:
-    "rounded-none border-2 border-cf-mid-gray bg-black text-cf-light-gray hover:text-cf-orange hover:border-cf-orange font-mono uppercase text-xs",
+    "rounded-none border-2 border-muted bg-card text-[var(--cf-light-gray)] hover:text-[var(--cf-orange)] hover:border-[var(--cf-orange)] font-mono uppercase text-xs",
   // Red/dark-orange — destructive action (CLEAR, STOP)
   danger:
-    "rounded-none border-2 border-cf-orange-dark bg-black text-cf-orange-dark hover:bg-cf-orange-dark hover:text-black font-mono uppercase text-xs",
+    "rounded-none border-2 border-[var(--cf-orange-dark)] bg-card text-[var(--cf-orange-dark)] hover:bg-[var(--cf-orange-dark)] hover:text-[var(--bg-card)] font-mono uppercase text-xs",
   // Like secondary but danger colors on hover
   ghost:
-    "rounded-none border-2 border-cf-mid-gray bg-black text-cf-light-gray hover:text-cf-orange-dark hover:border-cf-orange-dark font-mono uppercase text-xs"
+    "rounded-none border-2 border-muted bg-card text-[var(--cf-light-gray)] hover:text-[var(--cf-orange-dark)] hover:border-[var(--cf-orange-dark)] font-mono uppercase text-xs"
 };
 
 export function CyberButton({

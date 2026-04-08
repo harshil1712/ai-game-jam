@@ -10,7 +10,7 @@ import { CyberButton } from "../../components/CyberButton";
 
 export const Route = createFileRoute("/_authed/gallery")({
   component: GalleryPage,
-  loader: async (): Promise<GalleryData> => fetchGallery(20)
+  loader: async (): Promise<GalleryData> => fetchGallery(20),
 });
 
 function GalleryPage() {
@@ -31,8 +31,8 @@ function GalleryPage() {
         prev.map((g) =>
           g.id === gameId
             ? { ...g, vote_count: result.vote_count, has_voted: result.voted }
-            : g
-        )
+            : g,
+        ),
       );
     } catch {
       // Ignore errors
@@ -40,12 +40,12 @@ function GalleryPage() {
   };
 
   return (
-    <div className="min-h-screen bg-bg-deep">
+    <div className="min-h-screen bg-base">
       <AppHeader
         title="ARCHIVE"
         actions={
           <Link to="/chat">
-            <CyberButton icon={<ChatCircleDotsIcon size={14} />}>
+            <CyberButton icon={<ChatCircleDotsIcon size={14} />} size="xs">
               BUILDER
             </CyberButton>
           </Link>
@@ -61,11 +61,11 @@ function GalleryPage() {
 
         {games.length === 0 && (
           <div className="text-center py-20">
-            <div className="inline-block border-2 border-cf-mid-gray p-8 mb-6">
-              <p className="text-cf-light-gray text-lg font-mono uppercase">
+            <div className="inline-block border-2 border-muted p-8 mb-6">
+              <p className="text-muted text-lg font-mono uppercase">
                 [ARCHIVE EMPTY]
               </p>
-              <p className="text-cf-mid-gray text-sm font-mono mt-2">
+              <p className="text-dim-color text-sm font-mono mt-2">
                 No data entries found in database
               </p>
             </div>

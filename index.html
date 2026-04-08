@@ -17,7 +17,7 @@
     />
     <script>
       (() => {
-        const mode = localStorage.getItem("theme") || "light";
+        const mode = localStorage.getItem("theme") || "dark";
         document.documentElement.setAttribute("data-mode", mode);
         document.documentElement.style.colorScheme = mode;
       })();
