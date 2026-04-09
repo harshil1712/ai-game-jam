@@ -1,6 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useCallback } from "react";
-import { ChatCircleDotsIcon } from "@phosphor-icons/react";
 import type { GalleryGame, GalleryData } from "../../types";
 import { fetchGallery, vote } from "../../lib/api";
 import { usePolling } from "../../hooks/usePolling";
@@ -10,7 +9,7 @@ import { CyberButton } from "../../components/CyberButton";
 
 export const Route = createFileRoute("/_authed/gallery")({
   component: GalleryPage,
-  loader: async (): Promise<GalleryData> => fetchGallery(20),
+  loader: async (): Promise<GalleryData> => fetchGallery(20)
 });
 
 function GalleryPage() {
@@ -31,8 +30,8 @@ function GalleryPage() {
         prev.map((g) =>
           g.id === gameId
             ? { ...g, vote_count: result.vote_count, has_voted: result.voted }
-            : g,
-        ),
+            : g
+        )
       );
     } catch {
       // Ignore errors
@@ -41,16 +40,7 @@ function GalleryPage() {
 
   return (
     <div className="min-h-screen bg-base">
-      <AppHeader
-        title="ARCHIVE"
-        actions={
-          <Link to="/chat">
-            <CyberButton icon={<ChatCircleDotsIcon size={14} />} size="xs">
-              BUILDER
-            </CyberButton>
-          </Link>
-        }
-      />
+      <AppHeader />
 
       <main className="max-w-6xl mx-auto px-5 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
