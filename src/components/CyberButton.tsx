@@ -73,5 +73,7 @@ export function CyberLinkButton({
 }: CyberLinkButtonProps) {
   const combinedClassName = `${cyberClasses[cyber]} ${className}`;
 
-  return <LinkButton variant={variant} className={combinedClassName} {...props} />;
+  return (
+    <LinkButton variant={variant} className={combinedClassName} {...props} />
+  );
 }

@@ -10,7 +10,7 @@ import {
   StopIcon,
   TrashIcon,
   BrainIcon,
-  CaretDownIcon,
+  CaretDownIcon
 } from "@phosphor-icons/react";
 
 import { isToolUIPart, getToolName } from "ai";
@@ -20,7 +20,7 @@ import { AppHeader } from "../../components/AppHeader";
 import { CyberButton } from "../../components/CyberButton";
 
 export const Route = createFileRoute("/_authed/chat")({
-  component: ChatPage,
+  component: ChatPage
 });
 
 function ChatPage() {
@@ -34,11 +34,11 @@ function ChatPage() {
     agent: "ChatAgent",
     name: `user_${user?.id}`,
     onOpen: () => setConnected(true),
-    onClose: () => setConnected(false),
+    onClose: () => setConnected(false)
   });
 
   const { messages, sendMessage, clearHistory, stop, status } = useAgentChat({
-    agent,
+    agent
   });
 
   const isStreaming = status === "streaming" || status === "submitted";
@@ -76,7 +76,7 @@ function ChatPage() {
 
     sendMessage({
       role: "user",
-      parts: [{ type: "text", text }],
+      parts: [{ type: "text", text }]
     });
 
     if (textareaRef.current) {
@@ -89,7 +89,7 @@ function ChatPage() {
     "Make a quiz about Cloudflare",
     "Create a drawing canvas",
     "Build a memory match game",
-    "Make a bouncing balls simulation",
+    "Make a bouncing balls simulation"
   ];
 
   return (
@@ -131,7 +131,7 @@ function ChatPage() {
                     onClick={() =>
                       sendMessage({
                         role: "user",
-                        parts: [{ type: "text", text: prompt }],
+                        parts: [{ type: "text", text: prompt }]
                       })
                     }
                     className="tracking-wide"

@@ -7,39 +7,37 @@ const GITHUB_REPO = "https://github.com/harshil1712/ai-game-jam";
 const BUILD_RESOURCES = [
   {
     label: "Dynamic Workers",
-    url: "https://developers.cloudflare.com/dynamic-workers/",
+    url: "https://developers.cloudflare.com/dynamic-workers/"
   },
   { label: "Agents SDK", url: "https://developers.cloudflare.com/agents/" },
   { label: "Workers AI", url: "https://developers.cloudflare.com/workers-ai/" },
-  { label: "D1 Database", url: "https://developers.cloudflare.com/d1/" },
+  { label: "D1 Database", url: "https://developers.cloudflare.com/d1/" }
 ];
 import type { LeaderboardGame, DashboardData, Stats } from "../types";
 import { fetchDashboard, fetchStats } from "../lib/api";
 import { usePolling } from "../hooks/usePolling";
 import { AppHeader } from "../components/AppHeader";
 import { CyberSurface } from "../components/CyberSurface";
-import { CyberButton } from "../components/CyberButton";
 
 export const Route = createFileRoute("/dashboard")({
   component: DashboardPage,
-  loader: async (): Promise<DashboardData> => fetchDashboard(10),
+  loader: async (): Promise<DashboardData> => fetchDashboard(10)
 });
 
 function DashboardPage() {
   const initialData = Route.useLoaderData();
   const [games, setGames] = useState<LeaderboardGame[]>(initialData.games);
-  const [stats, setStats] = useState<Stats>({
+  const [_stats, setStats] = useState<Stats>({
     total_games: 0,
     total_users: 0,
     total_votes: 0,
-    recent_games: 0,
+    recent_games: 0
   });
-
 
   const refresh = useCallback(async () => {
     const [galleryData, statsData] = await Promise.all([
       fetchDashboard(10),
-      fetchStats(),
+      fetchStats()
     ]);
     setGames(galleryData.games);
     setStats(statsData);
@@ -142,7 +140,7 @@ function DashboardPage() {
                     src: "/qr-logo.svg",
                     height: 32,
                     width: 52,
-                    excavate: true,
+                    excavate: true
                   }}
                 />
               </div>

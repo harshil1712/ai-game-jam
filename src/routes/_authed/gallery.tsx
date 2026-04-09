@@ -9,7 +9,7 @@ import { CyberButton } from "../../components/CyberButton";
 
 export const Route = createFileRoute("/_authed/gallery")({
   component: GalleryPage,
-  loader: async (): Promise<GalleryData> => fetchGallery(20),
+  loader: async (): Promise<GalleryData> => fetchGallery(20)
 });
 
 function GalleryPage() {
@@ -30,8 +30,8 @@ function GalleryPage() {
         prev.map((g) =>
           g.id === gameId
             ? { ...g, vote_count: result.vote_count, has_voted: result.voted }
-            : g,
-        ),
+            : g
+        )
       );
     } catch {
       // Ignore errors
