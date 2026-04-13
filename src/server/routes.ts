@@ -63,6 +63,23 @@ export async function handleLogin(
   );
 }
 
+export async function handleLogout(
+  request: Request,
+  _env: Env
+): Promise<Response> {
+  const err = assertMethod(request, "GET");
+  if (err) return err;
+
+  return new Response(null, {
+    status: 302,
+    headers: {
+      Location: "/",
+      "Set-Cookie":
+        "session=; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=0"
+    }
+  });
+}
+
 export async function handleMe(request: Request, env: Env): Promise<Response> {
   const err = assertMethod(request, "GET");
   if (err) return err;

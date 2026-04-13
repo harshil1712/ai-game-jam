@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useAgent } from "agents/react";
 import { useAgentChat } from "@cloudflare/ai-chat/react";
 import { useState, useRef, useEffect, useCallback, useMemo } from "react";
@@ -10,7 +10,7 @@ import {
   StopIcon,
   TrashIcon,
   BrainIcon,
-  CaretDownIcon,
+  CaretDownIcon
 } from "@phosphor-icons/react";
 
 import { isToolUIPart, getToolName } from "ai";
@@ -20,7 +20,7 @@ import { AppHeader } from "../../components/AppHeader";
 import { CyberButton } from "../../components/CyberButton";
 
 export const Route = createFileRoute("/_authed/chat")({
-  component: ChatPage,
+  component: ChatPage
 });
 
 function ChatPage() {
@@ -34,11 +34,11 @@ function ChatPage() {
     agent: "ChatAgent",
     name: `user_${user?.id}`,
     onOpen: () => setConnected(true),
-    onClose: () => setConnected(false),
+    onClose: () => setConnected(false)
   });
 
   const { messages, sendMessage, clearHistory, stop, status } = useAgentChat({
-    agent,
+    agent
   });
 
   const isStreaming = status === "streaming" || status === "submitted";
@@ -76,7 +76,7 @@ function ChatPage() {
 
     sendMessage({
       role: "user",
-      parts: [{ type: "text", text }],
+      parts: [{ type: "text", text }]
     });
 
     if (textareaRef.current) {
@@ -89,20 +89,16 @@ function ChatPage() {
     "Make a quiz about Cloudflare",
     "Create a drawing canvas",
     "Build a memory match game",
-    "Make a bouncing balls simulation",
+    "Make a bouncing balls simulation"
   ];
 
   return (
     <div className="flex flex-col h-screen bg-base">
-      <AppHeader
-        title="AI GAME JAM"
-        actions={
-          <>
-            <Link to="/gallery">
-              <CyberButton variant="secondary" size="xs">
-                ARCHIVE
-              </CyberButton>
-            </Link>
+      <AppHeader />
+
+      <div className="flex-1 flex flex-col overflow-hidden max-w-3xl mx-auto w-full">
+        {messages.length > 0 && (
+          <div className="flex justify-end px-5 pt-4">
             <CyberButton
               cyber="ghost"
               variant="secondary"
@@ -112,11 +108,8 @@ function ChatPage() {
             >
               CLEAR
             </CyberButton>
-          </>
-        }
-      />
-
-      <div className="flex-1 flex flex-col overflow-hidden max-w-3xl mx-auto w-full">
+          </div>
+        )}
         <div className="flex-1 overflow-y-auto px-5 py-6">
           {messages.length === 0 && (
             <div className="text-center py-12">
@@ -138,7 +131,7 @@ function ChatPage() {
                     onClick={() =>
                       sendMessage({
                         role: "user",
-                        parts: [{ type: "text", text: prompt }],
+                        parts: [{ type: "text", text: prompt }]
                       })
                     }
                     className="tracking-wide"
